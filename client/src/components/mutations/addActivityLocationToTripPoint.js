@@ -4,8 +4,8 @@ export default gql`
 mutation addActivityLocationToTripPoint($tripPointId: ID!, $activitylocationId: ID!){
   addActivityLocationToTripPoint(tripPointId: $tripPointId, activitylocationId: $activitylocationId){
     id
-    image
-    video
+    images
+    videos
     note
     activitylocation{
       id

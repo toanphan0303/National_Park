@@ -1,10 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const noteSchema = require('./note')
 const TripPointSchema = new Schema({
-  image:{ type: [String]},
-  video:{ type: [String]},
-  note: { type: [String]},
+  images:[{
+    type: Schema.Types.ObjectId,
+    ref: 'image'
+  }],
+  videos:[{
+    type: Schema.Types.ObjectId,
+    ref: 'video'
+  }],
+  note:{
+    type: Schema.Types.ObjectId,
+    ref: 'note'
+  },
   activitylocation: {
     type: Schema.Types.ObjectId,
     ref: 'activitylocation'
@@ -31,16 +39,57 @@ TripPointSchema.statics.findActivityLocation = function(id){
       return TripPoint.activitylocation
     })
 }
-TripPointSchema.statics.addImageUrl = function(id, imgUrl){
-  return this.update({"_id": id},
-    {$pushAll: {image: imgUrl}},
-    {upsert:true}, ((err) => {
-      if(err){console.error(err)}
-      else{
-      console.log("successfule add image Url to Trip Point")
-      return id
-    }})
-  )
+TripPointSchema.statics.findImages = function(id){
+  return this.findById(id)
+    .populate('images')
+    .then((TripPoint) => {
+      return TripPoint.images
+    })
+}
+TripPointSchema.statics.findVideos = function(id){
+  return this.findById(id)
+    .populate('videos')
+    .then((TripPoint) => {
+      return TripPoint.videos
+    })
+}
+TripPointSchema.statics.findNote = function(id){
+  return this.findById(id)
+    .populate('note')
+    .then((TripPoint) => {
+      return TripPoint.note
+    })
+}
+
+TripPointSchema.statics.addImage = function(id, title, url){
+  const Image = mongoose.model('image')
+  return this.findById(id)
+    .then(TripPoint =>{
+      const imageObj = new Image({title, url})
+      TripPoint.images.push(imageObj)
+      return Promise.all([imageObj.save(), TripPoint.save()])
+        .then(([imageObj, TripPoint]) => TripPoint)
+    })
+}
+TripPointSchema.statics.addVideo = function(id, title, url){
+  const Video = mongoose.model('video')
+  return this.findById(id)
+    .then(TripPoint =>{
+      const videoObj = new Video({title, url})
+      TripPoint.videos.push(videoObj)
+      return Promise.all([imageObj.save(), TripPoint.save()])
+        .then(([videoObj, TripPoint]) => TripPoint)
+    })
+}
+TripPointSchema.static.addNote = function(id,title, content){
+  const Note = mongoose.model('note')
+  return this.findById(id)
+    .then(TripPoint =>{
+      const noteObj = new Video({title, content})
+      TripPoint.videos.push(videoObj)
+      return Promise.all([noteObj.save(), TripPoint.save()])
+        .then(([noteObj, TripPoint]) => TripPoint)
+    })
 }
 
 mongoose.model('trippoint', TripPointSchema)

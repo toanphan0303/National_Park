@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
-const noteSchema = new Schema({
+const videoSchema = new Schema({
   title: { type: String},
-  content: {type: String}
+  url: {type: String}
 })
 
-mongoose.model('note', noteSchema)
+mongoose.model('video', videoSchema)

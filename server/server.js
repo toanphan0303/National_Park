@@ -19,7 +19,7 @@ const MONGO_URI = 'mongodb://toan:toan@ds235418.mlab.com:35418/nps_trial'
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URI, options);
 mongoose.connection
-  .once('open', () => console.log('Connected to mongo lan instance'))
+  .once('open', () => console.log('Connected to mongo instance'))
   .on('error', error => console.log('Error on connectting to mongo lab', error))
 
 app.use(session({

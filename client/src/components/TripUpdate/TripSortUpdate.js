@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
 import fetchTrip from '../queries/fetchTrip'
 import deleteTripPoint from '../mutations/deleteTripPoint'
 import omitPointFromTrip from '../mutations/omitPointFromTrip'

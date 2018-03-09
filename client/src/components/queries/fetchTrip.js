@@ -7,8 +7,8 @@ export default gql`
       title
       tripPoints{
         id
-        image
-        video
+        images
+        videos
         note
         activitylocation{
           id

@@ -99,9 +99,9 @@ const mutation = new GraphQLObjectType({
     addTripPoint:{
       type: TripPointType,
       args:{
-        image:{ type: new GraphQLList(GraphQLString)},
-        video: { type: new GraphQLList(GraphQLString)},
-        note: { type: new GraphQLList(GraphQLString)},
+        images:{ type: GraphQLString},
+        videos: { type:  GraphQLString},
+        note: { type: GraphQLString},
       },
       resolve(parentValue, args){
         return ( new TripPoint()).save()
@@ -172,14 +172,25 @@ const mutation = new GraphQLObjectType({
             }
         }
     },
-    addImageUrl: {
+    addImage: {
       type: TripPointType,
       args: {
         pointId: { type: new GraphQLNonNull(GraphQLID)},
-        imgUrl: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))}
+        title: {type: new GraphQLNonNull(GraphQLString)},
+        url: {type: new GraphQLNonNull(GraphQLString)},
       },
-      resolve(parentValue, {pointId, imgUrl}){
-        return TripPoint.addImageUrl(pointId, imgUrl)
+      resolve(parentValue, {pointId, title, url}){
+        return TripPoint.addImage(pointId, title, url)
+      }
+    },
+    addNote:{
+      type: TripPointType,
+      args: {
+        pointId:{ type: new GraphQLNonNull(GraphQLID)},
+        content: {type: GraphQLString}
+      },
+      resolve(parentValue, {pointId, content}){
+        return TripPoint.addNote(pointId, content)
       }
     }
 

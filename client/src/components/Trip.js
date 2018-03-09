@@ -47,7 +47,7 @@ class Trip extends Component {
     }
     const point = () => {
       return this.props.createPoint({
-        variables: {image:"", video:"", note:""}
+        variables: {images:"", videos:"", note:""}
       })
     }
     const addLocPt = (tripPointId, activitylocationId) =>{
