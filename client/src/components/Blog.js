@@ -1,7 +1,7 @@
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import React, {Component} from 'react'
-import {Grid, Image, Segment, Card} from 'semantic-ui-react'
+import {Grid, Image, Segment, Card, Button} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import fetchPoint from './queries/fetchPoint'
 class BlogEditor extends Component {
@@ -62,6 +62,9 @@ class BlogEditor extends Component {
       <div>
         <Grid>
           <Grid.Column  width={10}>
+            <Segment>
+              <Button content='Save' primary />
+            </Segment>
             <Segment>
               <ReactQuill
                 theme="snow"

@@ -187,10 +187,11 @@ const mutation = new GraphQLObjectType({
       type: TripPointType,
       args: {
         pointId:{ type: new GraphQLNonNull(GraphQLID)},
+        title: { type: GraphQLString},
         content: {type: GraphQLString}
       },
-      resolve(parentValue, {pointId, content}){
-        return TripPoint.addNote(pointId, content)
+      resolve(parentValue, {pointId,title, content}){
+        return TripPoint.addNote(pointId,title, content)
       }
     }
 

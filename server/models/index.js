@@ -5,3 +5,4 @@ require('./trippoint')
 require('./trip');
 require('./image');
 require('./video');
+require('./note')

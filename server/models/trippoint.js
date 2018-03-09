@@ -81,12 +81,12 @@ TripPointSchema.statics.addVideo = function(id, title, url){
         .then(([videoObj, TripPoint]) => TripPoint)
     })
 }
-TripPointSchema.static.addNote = function(id,title, content){
+TripPointSchema.statics.addNote = function(id,title, content){
   const Note = mongoose.model('note')
   return this.findById(id)
     .then(TripPoint =>{
-      const noteObj = new Video({title, content})
-      TripPoint.videos.push(videoObj)
+      const noteObj = new Note({title, content})
+      TripPoint.note = noteObj
       return Promise.all([noteObj.save(), TripPoint.save()])
         .then(([noteObj, TripPoint]) => TripPoint)
     })
