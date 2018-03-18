@@ -31,10 +31,12 @@ class ParkList extends Component {
     }
     return (
       <div>
-        <h2>Popular Destination</h2>
-          <div className="row left">
-            {this.renderNpsContent()}
-          </div>
+        <div>
+          <h2>Popular Destination</h2>
+        </div>
+        <div className="row left">
+          {this.renderNpsContent()}
+        </div>
       </div>
     )
   }

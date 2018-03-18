@@ -9,7 +9,7 @@ class Signup extends Component {
     this.state= {
       email: "",
       password: "",
-      error: []
+      errors: []
     }
   }
   handleEmail(e){
@@ -23,15 +23,13 @@ class Signup extends Component {
     })
   }
   handleSignup(){
-    console.log(this.props)
     const {email, password} = this.state
     return this.props.loginUser({
       variables: {email, password},
       refetchQueries:[{query:fetchCurrentUser}]
     }).catch(res => {
-      console.log(res)
-      const error = res.graphQLErrors.map(error => error.message)
-      this.setState({error})
+      const errors = res.graphQLErrors.map(error => error.message)
+      this.setState({errors})
     })
       .then((data) => {
         if(data){
@@ -61,6 +59,9 @@ class Signup extends Component {
         <Form>
           <Form.Input fluid label='Email' placeholder='Email' size="small" onChange={this.handleEmail.bind(this)} />
           <Form.Input fluid label='Password' type='password' size="small"  placeholder='password' onChange={this.handlePassword.bind(this)} />
+          <div style={{ color: '#D8000C' ,backgroundColor: '#FFD2D2'}}>
+            {!_.isEmpty(this.state.errors) && this.state.errors.map(error =><div key={error}>{error}</div>)}
+          </div>
           <Form.Button onClick={this.handleSignup.bind(this)}>Login</Form.Button>
         </Form>
       </div>

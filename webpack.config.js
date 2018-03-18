@@ -11,6 +11,9 @@ module.exports = {
     bundle: './client/src/index.js',
     vendor: VENDOR_LIBS
   },
+  node:{
+    fs: "empty"
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[chunkhash].js'

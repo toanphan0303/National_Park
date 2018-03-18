@@ -25,7 +25,8 @@ class AuthModal extends Component{
       signup: false
     };
 
-    this.openModal = this.openModal.bind(this);
+    this.openModalSignUp = this.openModalSignUp.bind(this);
+    this.openModalLogin = this.openModalLogin.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
@@ -52,7 +53,6 @@ class AuthModal extends Component{
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
     this.subtitle.style.color = '#000';
   }
 
@@ -73,12 +73,12 @@ class AuthModal extends Component{
         ariaHideApp={false}
       >
         {this.state.login && !this.state.signup && <div>
-          <h2 style={{color:'black'}} ref={subtitle => this.subtitle = subtitle}>Join Us</h2>
+          <h2 style={{color:'black'}} ref={subtitle => this.subtitle = subtitle}>Login</h2>
           <LoginComponent callCloseModal={this.closeModal.bind(this)} />
         </div>}
         {!this.state.login && this.state.signup && <div>
-          <h2 style={{color:'black'}} ref={subtitle => this.subtitle = subtitle}>Log in</h2>
-          <LoginComponent callCloseModal={this.closeModal.bind(this)} />
+          <h2 style={{color:'black'}} ref={subtitle => this.subtitle = subtitle}>Join Us</h2>
+          <SignupComponent callCloseModal={this.closeModal.bind(this)} />
         </div>}
 
         <Divider horizontal></Divider>

@@ -3,13 +3,14 @@ import {Image,Divider, Form, Button} from 'semantic-ui-react'
 import SignupMutation from '../mutations/Signup';
 import fetchCurrentUser from '../queries/CurrentUser';
 import {graphql, compose} from 'react-apollo';
+import _ from 'lodash'
 class Signup extends Component {
   constructor(props){
     super(props)
     this.state= {
       email: "",
       password: "",
-      error: []
+      errors: []
     }
   }
   handleEmail(e){
@@ -23,18 +24,15 @@ class Signup extends Component {
     })
   }
   handleSignup(){
-    console.log(this.props)
     const {email, password} = this.state
     return this.props.signupUser({
       variables: {email, password},
       refetchQueries:[{query:fetchCurrentUser}]
     }).catch(res => {
-      console.log(res)
-      const error = res.graphQLErrors.map(error => error.message)
-      this.setState({error})
+      const errors = res.graphQLErrors.map(error => error.message)
+      this.setState({errors})
     })
       .then((data) => {
-        console.log(data)
         if(data){
           this.props.callCloseModal();
         }
@@ -62,6 +60,9 @@ class Signup extends Component {
         <Form>
           <Form.Input fluid label='Email' placeholder='Email' size="small" onChange={this.handleEmail.bind(this)} />
           <Form.Input fluid label='Password' type='password' size="small"  placeholder='password' onChange={this.handlePassword.bind(this)} />
+          <div style={{ color: '#D8000C' ,backgroundColor: '#FFD2D2'}}>
+            {!_.isEmpty(this.state.errors) && this.state.errors.map(error =><div key={error}>{error}</div>)}
+          </div>
           <Form.Button onClick={this.handleSignup.bind(this)}>Sign Up</Form.Button>
         </Form>
       </div>

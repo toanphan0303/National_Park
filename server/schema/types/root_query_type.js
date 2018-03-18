@@ -14,7 +14,8 @@ const {
   GraphQLObjectType,
   GraphQLID,
   GraphQLNonNull,
-  GraphQLList
+  GraphQLList,
+  GraphQLString
 } = graphql;
 
 const UserType = require('./user_type')
@@ -38,6 +39,13 @@ const RootQueryType = new GraphQLObjectType({
       args: {id: {type: new GraphQLNonNull(GraphQLID)}},
       resolve(parentValue, {id}){
         return Park.findById(id)
+      }
+    },
+    parkName:{
+      type: ParkType,
+      args: {title: {type: new GraphQLNonNull(GraphQLString)}},
+      resolve(parentValue, {title}){
+        return Park.findOne({"title": title})
       }
     },
     activitylocation: {
