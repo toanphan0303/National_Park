@@ -9,6 +9,7 @@ export default gql`
         id
       }
       tripPoints{
+        id
         activitylocation{
           id
           loc

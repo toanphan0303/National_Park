@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import query from './queries/CurrentUser';
 import mutation from './mutations/Logout'
-import AuthModal from './modals/AuthModal.js'
+import AuthModal from './modals/AuthMo.js'
 import {hashHistory} from 'react-router';
 import { Search, Menu, Segment} from 'semantic-ui-react'
 class Header extends Component {
@@ -32,8 +32,11 @@ class Header extends Component {
     })
   }
   // call child method from parent component
-  toggleModal (){
-    this.child.openModal()
+  openSignup(){
+    this.child.openModalSignUp()
+  }
+  OpenLogin(){
+    this.child.openModalLogin()
   }
   gotoPath(path){
     hashHistory.push(path)
@@ -49,17 +52,20 @@ class Header extends Component {
       )
     } else{
       return(
-        <Menu.Item name='Sign up or Log in' onClick={this.toggleModal.bind(this)} />
+        <div style={{display: 'inline-flex'}}>
+          <Menu.Item name='Sign up' onClick={this.openSignup.bind(this)} />
+          <Menu.Item name='Log in' onClick={this.OpenLogin.bind(this)} />
+        </div>
       )
     }
   }
   render() {
     return (
-    <Segment size='mini'>
-      <Menu secondary>
+    <Segment size='mini' style={{margin:0, padding:'4px'}}>
+      <Menu secondary >
         <Menu.Item name='home' onClick={this.gotoPath.bind(this,'/')} />
         <Menu.Item name='My Trip' onClick={this.gotoPath.bind(this,'/parks/trips/summary')} />
-        <Menu.Item name='friends'/>
+        <Menu.Item name='Following'/>
         <Menu.Menu position='right'>
             {this.renderItems()}
         </Menu.Menu>

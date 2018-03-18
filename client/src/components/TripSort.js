@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import SortableTree, {removeNodeAtPath} from "react-sortable-tree";
 import 'react-sortable-tree/style.css';
-// In your own app, you would need to use import styles once in the app
-// import 'react-sortable-tree/styles.css';
+import {Icon} from 'semantic-ui-react'
 
 export default class TripSort extends Component {
   constructor(props) {
@@ -55,7 +54,7 @@ export default class TripSort extends Component {
                   }))
                 }
               >
-                Remove
+                <Icon name="trash outline" />
               </button>,
             ],
           })}

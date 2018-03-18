@@ -16,14 +16,17 @@ class TripsSummaryUser extends Component{
         <Card key={id}>
           <Image src={""} height={200} width={200} mode={'fill'}/>
           <Card.Content>
-            <Link to={`/parks/${parkId}/trips/${id}`}>
+            <Link to={`/trips/${id}/tripreview`}>
             <Card.Header>{title}</Card.Header>
             </Link>
             <Rating maxRating={5} disabled />
           </Card.Content>
           <Card.Content extra>
-            <div className='ui one buttons'>
-              <Button basic color='blue'>Explore this trip</Button>
+            <div>
+              <Link to={`/parks/${parkId}/trips/${id}`}>Update</Link>
+            </div>
+            <div>
+              <Link to={`/trips/${id}/tripreview`}><p>Preview</p></Link>
             </div>
           </Card.Content>
         </Card>

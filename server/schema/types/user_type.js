@@ -15,6 +15,9 @@ const UserType = new GraphQLObjectType({
     return {
       id: {type: GraphQLID},
       email: {type: GraphQLString},
+      googleId:{type: GraphQLString},
+      facebookId:{type: GraphQLString},
+      avatar:{type: GraphQLString},
       trips: {
         type: new GraphQLList(TripType),
         resolve(parentValue){

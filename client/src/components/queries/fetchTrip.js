@@ -5,11 +5,27 @@ export default gql`
     trip(id: $id){
       id
       title
+      park{
+        title
+        loc
+      }
       tripPoints{
         id
-        images
-        videos
-        note
+        images{
+          id
+          title
+          url
+        }
+        videos{
+          id
+          title
+          url
+        }
+        note{
+          id
+          title
+          content
+        }
         activitylocation{
           id
           title

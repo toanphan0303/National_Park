@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const bodyParser = require('body-parser')
 const passport = require('passport');
-const passportConfig = require('./services/auth')
+require('./services/auth')
+require('./services/googleAuth')
+require('./services/fbAuth')
 const MongoStore = require('connect-mongo')(session);
 const schema = require('./schema/schema')
 
@@ -34,6 +36,8 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
+require('./routes/googleAuthRoutes')(app)
+require('./routes/fbAuthRoutes')(app)
 app.use('/graphql',bodyParser.json(), expressGraphQL({
   schema,
   graphiql: true

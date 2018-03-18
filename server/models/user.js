@@ -5,6 +5,9 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   email: String,
   password: String,
+  googleId: String,
+  facebookId: String,
+  avatar:String,
   trips: [{
     type: Schema.Types.ObjectId,
     ref: 'trip'
@@ -13,7 +16,6 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', function save(next){
   const user = this;
-  console.log(user)
   if(!user.isModified('password')){
     return next();
   }
@@ -21,7 +23,6 @@ UserSchema.pre('save', function save(next){
     if(err) {return next(err);}
     bcrypt.hash(user.password, salt, null, (err, hash) => {
       if(err) { return next(err); }
-      console.log(hash)
       user.password = hash;
       next();
     })

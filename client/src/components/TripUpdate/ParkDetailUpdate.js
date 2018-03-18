@@ -98,8 +98,8 @@ class ParkDetail extends Component {
     if(!park){ return <div>Loading </div>}
     return(
       <div>
-        <Header />
-        <Grid>
+        <Header/>
+        <Grid celled style={{margin:0}}>
           <Grid.Column width={4}>
             <Segment >
               <h3>Popular Place</h3>
@@ -108,7 +108,7 @@ class ParkDetail extends Component {
               </Card.Group>
             </Segment>
           </Grid.Column >
-          <Grid.Column width={12}>
+          <Grid.Column style={{padding: 0}} width={12}>
             <Segment>
               <TripUpdate park={park} tripid={this.props.params.id} sendRemainActPoint={this.getRemainActPoint.bind(this)} Trip={this.state.recentAddPoint} onRef={ref => (this.child = ref)}/>
             </Segment>

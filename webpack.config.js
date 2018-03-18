@@ -20,7 +20,7 @@ module.exports = {
       {
         use: 'babel-loader',
         test: /\.js$/,
-        exclude: /node_modules/
+        exclude: /node_modules(?!\/quill-image-drop-module|quill-image-resize-module)/
       },
 
       {
@@ -57,6 +57,9 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'client/public/index.html'
+    }),
+    new webpack.ProvidePlugin({
+      'window.Quill': 'quill'
     })
   ]
 };

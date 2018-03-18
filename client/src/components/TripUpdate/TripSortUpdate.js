@@ -3,8 +3,10 @@ import fetchTrip from '../queries/fetchTrip'
 import deleteTripPoint from '../mutations/deleteTripPoint'
 import omitPointFromTrip from '../mutations/omitPointFromTrip'
 import SortableTree, {removeNodeAtPath} from "react-sortable-tree";
-import ImageUploadModal from '../modals/ImageUpload'
+import ImageUploadModal from '../modals/ImageUploadModal'
+import BlogModal from '../modals/BlogModal'
 import 'react-sortable-tree/style.css';
+import {Icon, Popup, Button} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 class TripSortUpdate extends Component {
   constructor(props) {
@@ -20,27 +22,41 @@ class TripSortUpdate extends Component {
     }, () =>{ return })
   }
   componentWillReceiveProps(nextProps){
-    // console.log('nextProps ', nextProps)
     if(!(_.isEmpty(nextProps.tripPoint))&& (this.props.tripPoint != nextProps.tripPoint)){
       this.setState({
         treeData: this.state.treeData.concat([nextProps.tripPoint])
-      },() => { console.log('this.state.treeData',this.state.treeData) })
+      },() => { return})
     }
     if((nextProps.data.trip)&& (_.isEmpty(nextProps.tripPoint))){
+      let treeData =[];
+      nextProps.data.trip.tripPoints.map(ptn =>{
+        let temp = {}
+        const title = ptn.activitylocation.title
+        temp = {...ptn}
+        temp['title']= title
+        treeData.push(temp)
+      })
       this.setState({
-        treeData: nextProps.data.trip.tripPoints
-      },() => { return })
+        treeData
+      },() => { return})
     }
   }
   componentDidUpdate(){
     this.props.sendTreeData(this.state.treeData)
   }
 
-  addImageUrl({node}){
+  addImage({node}){
     this.setState({
       selectPoint : node.id
     }, () =>{
-      this.child.openModal()
+      this.childImage.openModal()
+    })
+  }
+  addNote({node}){
+    this.setState({
+      selectPoint : node.id
+    }, () =>{
+      this.childNote.openModal()
     })
   }
 
@@ -75,44 +91,56 @@ class TripSortUpdate extends Component {
     if(!this.props.data.trip){
       return (<div>Loading.....</div>)
     }
+    const styl ={
+      color: 'blue',
+    }
     return (
-      <div style={{ height: 300 }}>
+      <div style={{ height: 400 }}>
         <SortableTree
           treeData={this.state.treeData}
           canDrop={canDrop}
+          getNodeKey={({ node }) => node.id}
           onChange={treeData => this.setState({ treeData })}
           generateNodeProps={({ node, path }) => ({
             buttons: [
-              <button
-                onClick={this.handleDeleteClick.bind(this, {getNodeKey,node,path})}
-              >
-                Remove
-              </button>,
-              <button
-                onClick={this.addImageUrl.bind(this, {node})}
-              >
-                Image
-              </button>,
-              <button
-
-              >
-                Video
-              </button>,
-              <button
-
-              >
-                Note
-              </button>,
-
+              <Popup
+                trigger={<Icon name='add' style={{display: 'inline'}} rotated={'clockwise'} />}
+                hoverable={true}
+                >
+                <Popup.Content>
+                  <Button
+                    onClick={this.handleDeleteClick.bind(this, {getNodeKey,node,path})}
+                    icon='trash outline'
+                  />
+                  <Button
+                    onClick={this.addImage.bind(this, {node})}
+                    icon="image"
+                  />
+                  <Button
+                    icon="record"
+                  />
+                  <Button
+                    onClick={this.addNote.bind(this, {node})}
+                    icon="sticky note outline"
+                  />
+                </Popup.Content>
+              </Popup>
             ],
           })}
         />
         <div>
           <ImageUploadModal
-            onRef={ref =>{this.child = ref}}
+            onRef={ref =>{this.childImage = ref}}
             pointId={this.state.selectPoint}
           />
         </div>
+        <div>
+          <BlogModal
+          onRef={ref =>{this.childNote = ref}}
+          pointId={this.state.selectPoint}
+          />
+        </div>
+
       </div>
     );
   }

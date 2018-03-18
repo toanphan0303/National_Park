@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Image, Segment, Button, Form} from 'semantic-ui-react'
+import {Grid, Image, Segment, Button, Form, Container} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import {Link,hashHistory} from 'react-router';
 import Map from '../../MapComponents/Map'
@@ -21,18 +21,29 @@ class Trip extends Component {
       error: [],
       tripTitle: "",
       presentTrip: "",
+      titles:[]
     }
     this.getTreeData = this.getTreeData.bind(this)
+    this.getMapData = this.getMapData.bind(this)
   }
   contextTypes: {
     router: React.PropTypes.object
   }
+  getTitleFromActLoc(points){
+    let titles=[]
+    points.map(ptn =>{
+      titles.push(ptn.activitylocation.title)
+    })
+    return titles
+  }
   getTreeData(treeData){
     const locationList = this.handleLocation(treeData);
+    const titles = this.getTitleFromActLoc(treeData)
     if(!(_.isEqual(this.state.sumPoint,locationList))){
       this.setState({
         sumPoint : locationList,
-        treeData: treeData
+        treeData: treeData,
+        titles
       },() => {return this.props.sendRemainActPoint(this.state.treeData)})
     }
   }
@@ -83,15 +94,33 @@ class Trip extends Component {
       locationList.destination = {lat: park.loc[0], lng: park.loc[1]};
       locationList.startRoute = false
       locationList.initial = true
-
     }
     return locationList
   }
-
+  getMapData(meter, secs, tripDistance, tripDuration){
+    const distance = (meter*0.000621371).toFixed(2);
+    const duration = (secs/60).toFixed(2);
+    this.setState({
+      distance,
+      duration,
+      tripDistance,
+      tripDuration
+    })
+  }
+  generateTrip(){
+    let i =-1 ;
+    if(_.isEmpty(this.state.tripDistance)){
+      return <div>No point is created</div>
+    }
+    return this.state.tripDistance.map( trD =>{
+      i++
+      return(<div key={trD}> From point {String.fromCharCode('A'.charCodeAt(0) + i)} to point {String.fromCharCode('A'.charCodeAt(0) +i+1)} : {(trD*0.000621371).toFixed(2)}  </div>)
+    })
+  }
   render(){
     return(
       <Grid>
-        <Grid.Column width={5}>
+        <Grid.Column width={5} style={{padding:'0px'}}>
           <Segment>
             <Form>
              <Form.Field>
@@ -101,15 +130,23 @@ class Trip extends Component {
              <Button type='submit' onClick={this.handleDataSaveTrip.bind(this)}>Save</Button>
             </Form>
           </Segment>
-          <Segment>
+          <Segment style={{padding:'4px', margin:0}}>
             <h3>Your Trip  </h3>
             <TripSortUpdate tripId={this.props.tripid} tripPoint={this.props.Trip} sendTreeData={this.getTreeData}/>
           </Segment>
         </Grid.Column>
-        <Grid.Column width={11}>
-          <Segment>
+        <Grid.Column width={11} style={{padding:'0px'}}>
+          <Segment style={{padding:'4px'}}>
             <h3>Your Trip Map</h3>
-            <Map locationList={this.state.sumPoint} isMarkerShown />
+            <Map locationList={this.state.sumPoint} sendMapData={this.getMapData} titles={this.state.titles} isMarkerShown />
+          </Segment>
+          <Segment style={{padding:'4px'}}>
+            <Container fluid>
+              <h4>Trip Infomation</h4>
+              {this.generateTrip()}
+              <p>Trip distance: {this.state.distance} miles</p>
+              <p>Trip duration: {this.state.duration} minutes (travel by foot)</p>
+            </Container>
           </Segment>
         </Grid.Column>
       </Grid>

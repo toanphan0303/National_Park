@@ -9,8 +9,8 @@ import App from './components/App';
 import Landing from './components/Landing'
 import ParkDetail from './components/ParkDetails'
 import TripsSummary from './components/TripsSummary'
-import Blog from './components/blog'
 import ParkDetailUpdate from './components/TripUpdate/ParkDetailUpdate'
+import TripReview from './components/TripReview/TripReview'
 import registerServiceWorker from './registerServiceWorker';
 import 'semantic-ui-css/semantic.min.css'
 const networkInterface = createNetworkInterface({
@@ -33,7 +33,7 @@ const Root = () => {
           <Route path="/parks/:id" component={ParkDetail} />
           <Route path="/parks/trips/summary" component={TripsSummary} />
           <Route path="parks/:parkid/trips/:id" component={ParkDetailUpdate} />
-          <Route path="blog" component={Blog} />
+          <Route path='trips/:id/tripreview' component={TripReview} />
         </Route>
       </Router>
     </ApolloProvider>
