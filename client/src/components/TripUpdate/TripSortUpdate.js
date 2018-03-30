@@ -6,7 +6,7 @@ import SortableTree, {removeNodeAtPath} from "react-sortable-tree";
 import ImageUploadModal from '../modals/ImageUploadModal'
 import BlogModal from '../modals/BlogModal'
 import 'react-sortable-tree/style.css';
-import {Icon, Popup, Button} from 'semantic-ui-react'
+import {Icon, Popup, Button, Loader,Dimmer} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 class TripSortUpdate extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class TripSortUpdate extends Component {
   componentDidMount(){
     this.setState({
       treeData: [...this.state.treeData]
-    }, () =>{ return })
+    }, () =>{ return})
   }
   componentWillReceiveProps(nextProps){
     if(!(_.isEmpty(nextProps.tripPoint))&& (this.props.tripPoint != nextProps.tripPoint)){
@@ -89,29 +89,30 @@ class TripSortUpdate extends Component {
     };
     const getNodeKey = ({ treeIndex }) => treeIndex;
     if(!this.props.data.trip){
-      return (<div>Loading.....</div>)
-    }
-    const styl ={
-      color: 'blue',
+      return (
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      )
     }
     return (
-      <div style={{ height: 400 }}>
+      <div style={{ height:'435px' }}>
         <SortableTree
           treeData={this.state.treeData}
           canDrop={canDrop}
-          getNodeKey={({ node }) => node.id}
           onChange={treeData => this.setState({ treeData })}
           generateNodeProps={({ node, path }) => ({
             buttons: [
+              <button
+                onClick={this.handleDeleteClick.bind(this, {getNodeKey,node,path})}
+                >
+                <Icon name="trash outline" />
+              </button>,
               <Popup
                 trigger={<Icon name='add' style={{display: 'inline'}} rotated={'clockwise'} />}
                 hoverable={true}
                 >
                 <Popup.Content>
-                  <Button
-                    onClick={this.handleDeleteClick.bind(this, {getNodeKey,node,path})}
-                    icon='trash outline'
-                  />
                   <Button
                     onClick={this.addImage.bind(this, {node})}
                     icon="image"

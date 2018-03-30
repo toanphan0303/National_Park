@@ -34,7 +34,6 @@ class Header extends Component {
       variables: {title}
     })
     .then(data =>{
-      console.log(data)
       const {id} = data.data.parkName
       const url = window.location.href +'parks/'+id
 
@@ -72,6 +71,7 @@ class Header extends Component {
     this.props.mutate({
       refetchQueries: [{query}]
     })
+    hashHistory.push('/')
   }
   // call child method from parent component
   openSignup(){
@@ -114,7 +114,7 @@ class Header extends Component {
   render() {
        const { isLoading, value, results } = this.state
     return (
-    <Segment size='mini' style={{margin:0, padding:'4px'}}>
+    <Segment size='mini' style={{margin:0, padding:'4px'}} mobile={16} tablet={8} computer={16}>
       <Menu secondary >
         <Menu.Item name='home' onClick={this.gotoPath.bind(this,'/')} />
         <Menu.Item name='My Trip' onClick={this.gotoPath.bind(this,'/parks/trips/summary')} />

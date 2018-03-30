@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {graphql, compose} from 'react-apollo';
 import Header from '../Header'
 import fetchPark from '../queries/fetchPark'
-import Map from '../../MapComponents/Map';
+import Map from '../../MapComponents/newMap';
 import TripUpdate from './TripUpdate'
 import addTripPoint from '../mutations/addTripPoint'
 import addActivityLocationToTripPoint from '../mutations/addActivityLocationToTripPoint'
 import addTripPointToTrip from '../mutations/addTripPointToTrip'
 import _ from 'lodash'
-import {Grid, Image, Segment, Button, Card, Rating} from 'semantic-ui-react'
+import'../../style/ParkDetails.css'
+import {Grid, Image, Segment, Button, Card, Rating, Loader,Dimmer} from 'semantic-ui-react'
 class ParkDetail extends Component {
   constructor(props) {
     super(props)
@@ -77,7 +78,7 @@ class ParkDetail extends Component {
     return this.state.activityPoints.map(({id, title,name, description, url, loc}) =>{
       return (
         <Card key={id}>
-          <Image src={""} height={200} width={200} mode={'fill'}/>
+          <Image src={""} style={{margin: '10px 10px', width:'250px', borderWidth:'thin', borderStyle:'solid', borderColor:'rgba(34,36,38,.15)'}} mode={'fill'}/>
           <Card.Content>
             <Card.Header>{title}</Card.Header>
             <Card.Description>{description}</Card.Description>
@@ -86,7 +87,6 @@ class ParkDetail extends Component {
           <Card.Content extra>
             <div className='ui two buttons'>
               <Button basic color='green' onClick={'click', () => this.addActivity({id, title,name, description, url, loc})}>Add to Trip</Button>
-              <Button basic color='blue'>Explore this place</Button>
             </div>
           </Card.Content>
         </Card>
@@ -95,20 +95,26 @@ class ParkDetail extends Component {
   }
   render(){
     const {park} = this.props.data;
-    if(!park){ return <div>Loading </div>}
+    if(!park){ return (
+      <Dimmer active>
+        <Loader />
+      </Dimmer>
+    )}
     return(
       <div>
         <Header/>
-        <Grid celled style={{margin:0}}>
-          <Grid.Column width={4}>
+        <Grid>
+          <Grid.Column style={{paddingRight: '0px'}}  width={4} mobile={16} tablet={8} computer={4}>
             <Segment >
               <h3>Popular Place</h3>
-              <Card.Group itemsPerRow={1}>
-                {this.renderCard()}
-              </Card.Group>
+              <div style={{ height: '600px', overflowY:'scroll'}}>
+                <Card.Group itemsPerRow={1}>
+                  {this.renderCard()}
+                </Card.Group>
+              </div>
             </Segment>
           </Grid.Column >
-          <Grid.Column style={{padding: 0}} width={12}>
+          <Grid.Column style={{paddingLeft: '0px'}} width={12} mobile={16} tablet={8} computer={12}>
             <Segment>
               <TripUpdate park={park} tripid={this.props.params.id} sendRemainActPoint={this.getRemainActPoint.bind(this)} Trip={this.state.recentAddPoint} onRef={ref => (this.child = ref)}/>
             </Segment>

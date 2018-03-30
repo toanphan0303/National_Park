@@ -192,7 +192,7 @@ const MyMapComponent = compose(
           fontSize: '12'
         }}
         zIndex={2}
-        icon={'http://maps.google.com/mapfiles/kml/pal2/icon12.png'}
+        icon={'http://maps.google.com/mapfiles/kml/paddle/grn-circle-lv.png'}
         animation={google.maps.Animation.DROP}
 
       />)

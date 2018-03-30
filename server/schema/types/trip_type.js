@@ -12,6 +12,7 @@ const TripType = new GraphQLObjectType({
   fields: () => ({
     id: {type: GraphQLID},
     title: {type: GraphQLString},
+    tripImage: {type: GraphQLString},
     tripPoints: {
       type: new GraphQLList(TripPointType),
       resolve(parentValue){

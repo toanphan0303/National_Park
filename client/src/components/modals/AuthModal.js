@@ -4,6 +4,7 @@ import {facebookConfig, googleConfig} from '../../../config/socialConfig';
 import SignupMutation from '../mutations/Signup';
 import query from '../queries/CurrentUser';
 import LoginMutation from '../mutations/Login';
+import {hashHistory} from 'react-router'
 import {graphql, compose} from 'react-apollo';
 
 class AuthModal extends Component {
@@ -31,6 +32,8 @@ class AuthModal extends Component {
     this.setState({
       showModal: false,
       error: null
+    }, () =>{
+      hashHistory.push('/')
     })
   }
   onLoginSuccess(method, response){

@@ -3,7 +3,7 @@ import {Grid, Image, Segment, Button, Form,Container, Header} from 'semantic-ui-
 import {graphql, compose} from 'react-apollo';
 import {Link,hashHistory} from 'react-router';
 import TestMap from '../MapComponents/testMap'
-import Map from '../MapComponents/Map'
+import Map from '../MapComponents/newMap'
 import TripSort from './TripSort'
 import addTrip from './mutations/addTrip'
 import addTripPoint from './mutations/addTripPoint'
@@ -25,7 +25,8 @@ class Trip extends Component {
       duration: 0,
       tripDistance: [],
       tripDuration: [],
-      titles:[]
+      titles:[],
+      saveButton: false
     }
     this.getTreeData = this.getTreeData.bind(this)
     this.getMapData = this.getMapData.bind(this)
@@ -63,11 +64,14 @@ class Trip extends Component {
   }
   handleDataSaveTrip = async(e) =>{
     e.preventDefault()
+    this.setState({
+      saveButton:true
+    })
     const park = this.props.park.id;
-
     const trip = () =>{
+      const tripImage = 'https://s3.amazonaws.com/user-upload-image/National_park/'+this.props.park.title.split(" ").join("+")+".jpg"
       return this.props.createTrip({
-        variables: {user, title, park}
+        variables: {user, title, tripImage, park}
       })
     }
     const point = () => {
@@ -113,6 +117,11 @@ class Trip extends Component {
         return;
         }
     })
+    this.setState({
+      saveButton:false
+    }, () =>{
+      hashHistory.push('/parks/trips/summary')
+    })
   }
   handleLocation(treeData){
     const {park} = this.props;
@@ -121,7 +130,6 @@ class Trip extends Component {
       locationList.parkLocation = {lat: park.loc[0], lng: park.loc[1]}
       let arrWayPoints=[];
       locationList.startRoute = true
-      locationList.initial = false
       for(var i= 0; i< treeData.length; i++){
         if(i===0){
           locationList.origin = {lat: treeData[i].loc[0], lng: treeData[i].loc[1]}
@@ -138,16 +146,10 @@ class Trip extends Component {
     } else if (treeData.length ==1 ){
       locationList.parkLocation= {lat: park.loc[0], lng: park.loc[1]};
       locationList.origin = {lat: treeData[0].loc[0], lng: treeData[0].loc[1]}
-      locationList.destination = {lat: treeData[0].loc[0], lng: treeData[0].loc[1]}
       locationList.startRoute = false
-      locationList.initial = false
     } else{
       locationList.parkLocation= {lat: park.loc[0], lng: park.loc[1]};
-      locationList.origin = {lat: park.loc[0], lng: park.loc[1]};
-      locationList.destination = {lat: park.loc[0], lng: park.loc[1]};
       locationList.startRoute = false
-      locationList.initial = true
-
     }
     return locationList
   }
@@ -160,34 +162,38 @@ class Trip extends Component {
   }
   render(){
     return(
-      <Grid>
-        <Grid.Column width={5}>
-          <Segment>
+      <Grid style={{height: '665px'}}>
+        <Grid.Column style={{paddingRight: '0px'}}  width={5} width={4} mobile={16} tablet={8} computer={5}>
+          <Segment style={{marginBottom: '0px'}}>
             <Form>
              <Form.Field>
                <label>Trip Title</label>
                <Form.Input placeholder='My Trip to Yellow Stone' onChange={(e) => {this.setState({tripTitle:e.target.value})}} />
              </Form.Field>
-             <Button type='submit' onClick={this.handleDataSaveTrip.bind(this)}>Save</Button>
+             <Button
+                type='submit'
+                primary
+                loading={this.state.saveButton}
+                onClick={this.handleDataSaveTrip.bind(this)}>Save Trip</Button>
             </Form>
           </Segment>
-          <Segment>
+          <Segment style={{marginTop: '0px'}}>
             <h3>Your Trip  </h3>
             <TripSort tripPoint={this.props.Trip} sendTreeData={this.getTreeData}/>
           </Segment>
         </Grid.Column>
-        <Grid.Column width={11}>
-          <Segment>
+        <Grid.Column style={{paddingLeft: '0px'}}  width={11} width={5} width={4} mobile={16} tablet={8} computer={11}>
+          <Segment style={{marginBottom: '0px'}}>
             <h3>Your Trip Map</h3>
             <Map locationList={this.state.sumPoint} sendMapData={this.getMapData} titles={this.state.titles} isMarkerShown />
           </Segment>
-          <Segment>
-          <Container fluid>
-            <Header as='h2'>Trip Infomation</Header>
-            {this.generateTrip()}
-            <p>Trip distance: {this.state.distance} miles</p>
-            <p>Trip duration: {this.state.duration} minutes (travel by foot)</p>
-          </Container>
+          <Segment style={{marginTop: '0px'}}>
+            <Container fluid>
+              <Header as='h2'>Trip Infomation</Header>
+              {this.generateTrip()}
+              <p>Trip distance: {this.state.distance} miles</p>
+              <p>Trip duration: {this.state.duration} minutes (travel by foot)</p>
+            </Container>
           </Segment>
         </Grid.Column>
       </Grid>

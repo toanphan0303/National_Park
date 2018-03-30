@@ -8,7 +8,9 @@ import {Router, hashHistory, Route, IndexRoute} from 'react-router';
 import App from './components/App';
 import Landing from './components/Landing'
 import ParkDetail from './components/ParkDetails'
+import AllParkList from './components/AllParkList'
 import TripsSummary from './components/TripsSummary'
+import RequireAuth from './components/Auth/RequireAuth'
 import ParkDetailUpdate from './components/TripUpdate/ParkDetailUpdate'
 import TripReview from './components/TripReview/TripReview'
 import registerServiceWorker from './registerServiceWorker';
@@ -30,10 +32,11 @@ const Root = () => {
       <Router history={hashHistory}>
         <Route path="/" component={App} >
           <IndexRoute component={Landing} />
-          <Route path="/parks/:id" component={ParkDetail} />
-          <Route path="/parks/trips/summary" component={TripsSummary} />
-          <Route path="parks/:parkid/trips/:id" component={ParkDetailUpdate} />
-          <Route path='trips/:id/tripreview' component={TripReview} />
+          <Route path="/parks/" component={AllParkList} />
+          <Route path="/parks/:id" component={RequireAuth(ParkDetail)} />
+          <Route path="/parks/trips/summary" component={RequireAuth(TripsSummary)} />
+          <Route path="parks/:parkid/trips/:id" component={RequireAuth(ParkDetailUpdate)} />
+          <Route path='trips/:id/tripreview' component={RequireAuth(TripReview)} />
         </Route>
       </Router>
     </ApolloProvider>

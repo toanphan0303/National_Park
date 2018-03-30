@@ -91,5 +91,21 @@ TripPointSchema.statics.addNote = function(id,title, content){
         .then(([noteObj, TripPoint]) => TripPoint)
     })
 }
+TripPointSchema.statics.deleteImage = function(id, imgId){
+  console.log(imgId)
+  return this.update({'_id': id}, {$pull: {images: imgId}},
+  {safe: true},
+  (err, data)=>{
+    if(err){
+      console.error(err)
+    }else{
+      return this.findById(id)
+        .populate('images')
+        .then((TripPoint) => {
+          return TripPoint.images
+        })
+    }
+  })
+}
 
 mongoose.model('trippoint', TripPointSchema)

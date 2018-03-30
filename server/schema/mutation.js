@@ -4,7 +4,8 @@ const aws =require('aws-sdk');
 const Park = mongoose.model('park');
 const TripPoint = mongoose.model('trippoint')
 const Trip = mongoose.model('trip')
-const Keys = require('../config/keys')
+const User = mongoose.model('user')
+const Keys = require('../../config/keys')
 var awsConfig = require('aws-config');
 const {
   GraphQLObjectType,
@@ -79,11 +80,22 @@ const mutation = new GraphQLObjectType({
       type: TripType,
       args: {
         user: {type: new GraphQLNonNull(GraphQLID)},
+        tripImage: {type: new GraphQLNonNull(GraphQLString)},
         title: {type: new GraphQLNonNull(GraphQLString)},
         park: {type: new GraphQLNonNull(GraphQLID)}
       },
-      resolve(parentValue, {user, title, park}){
-        return Trip.addTrip(user, title, park)
+      resolve(parentValue, {user, title, tripImage, park}){
+        return Trip.addTrip(user, title, tripImage, park)
+      }
+    },
+    deleteTrip:{
+      type: UserType,
+      args:{
+        id: { type: new GraphQLNonNull(GraphQLID)},
+        tripId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {id, tripId}){
+        return User.deleteTrip(id,tripId)
       }
     },
     addTripPointToTrip: {
@@ -192,6 +204,16 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {pointId,title, content}){
         return TripPoint.addNote(pointId,title, content)
+      }
+    },
+    deleteImage: {
+      type:TripPointType,
+      args:{
+        pointId: { type: new GraphQLNonNull(GraphQLID)},
+        imgId: { type: new GraphQLNonNull(GraphQLID)},
+      },
+      resolve(parentValue, {pointId, imgId}){
+        return TripPoint.deleteImage(pointId, imgId)
       }
     }
 

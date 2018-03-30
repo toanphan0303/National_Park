@@ -5,6 +5,7 @@ export default gql`
     trips(id: $id){
       id
       title
+      tripImage
       park{
         id
       }

@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
-import npsName from '../static_assets/nps_name_shortlist';
-import path from 'path'
+import npsName from '../static_assets/nps_name';
 import query from './queries/fetchParks'
+import Header from './Header'
 import {graphql} from 'react-apollo'
 import {Link} from 'react-router'
-import _ from 'lodash'
-import { Segment, Card, Image,Rating,Loader, Dimmer} from 'semantic-ui-react'
-const IMG_PATH = '../static_assets/nps_images/'
-class ParkList extends Component {
+import { Segment, Card, Image,Rating} from 'semantic-ui-react'
+class AllParkList extends Component {
   renderNpsContent() {
-    const popular = _.intersectionBy(this.props.data.parks,npsName, 'title')
-    return popular.map(({id, title}) =>{
+    return this.props.data.parks.map(({id, title}) =>{
       const img = require(`../static_assets/nps_images/${title}.jpg`)
       return(
         <div key={id}>
@@ -32,27 +29,25 @@ class ParkList extends Component {
   }
   render(){
     if(this.props.data.loading){
-      return (
-        <Dimmer active>
-          <Loader />
-        </Dimmer>
-      )
+      return <div>Loading</div>
     }
     return (
       <div>
+      <div>
+        <Header />
+      </div>
+      <Segment style={{margin:'0px', padding:"0px 100px"}}>
         <div style={{marginBottom:'30px',marginTop:'10px'}}>
-          <h2>Popular National Parks</h2>
+          <h2>All National Parks</h2>
         </div>
         <div className="col s12 m6 l3">
           <Card.Group>
             {this.renderNpsContent()}
           </Card.Group>
-          <div>
-            <Link style={{display:"inline-block", marginTop:'15px'}} to="/parks/" >See all parks</Link>
-          </div>
         </div>
+      </Segment>
       </div>
     )
   }
 }
-export default graphql(query)(ParkList)
+export default graphql(query)(AllParkList)

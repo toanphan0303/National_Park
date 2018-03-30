@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Modal from 'react-modal';
 import SignupComponent from '../Auth/Signup'
 import LoginComponent from '../Auth/Login'
+import {hashHistory} from 'react-router'
 import { Segment, Button, Divider } from 'semantic-ui-react'
 const customStyles = {
   content : {
@@ -61,6 +62,8 @@ class AuthModal extends Component{
       modalIsOpen: false,
       login: false,
       signup: false
+    },() =>{
+      hashHistory.push('/')
     });
   }
   render() {

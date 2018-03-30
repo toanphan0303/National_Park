@@ -39,5 +39,19 @@ UserSchema.statics.findTrips = function(id){
     .populate('trips')
     .then(user => user.trips)
 }
+UserSchema.statics.deleteTrip = function(id, tripId){
+  return this.findById(id, (err, user) =>{
+    console.log(user)
+    console.log(tripId)
+    user.trips.remove({_id : tripId})
+    user.save((err) => {
+      if(err){
+        console.error('ERROR')
+      }
+    })
+    return user.populate
+  })
+
+}
 
 mongoose.model('user', UserSchema)

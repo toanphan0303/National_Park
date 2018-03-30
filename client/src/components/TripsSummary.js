@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import queryAllTrips from './queries/fetchTrips';
 import fetchUser from './queries/CurrentUser'
-import {Grid, Segment} from 'semantic-ui-react'
+import {Grid, Segment, Dimmer, Loader} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import TripsSummaryUser from './TripsSummaryUser'
 import SummaryTripMap from '../MapComponents/SummaryTripMap'
@@ -24,16 +24,20 @@ class TripsSummary extends Component{
   render(){
     const {user} = this.props.data
     if(!user){
-      return <div>Loading....</div>
+      return(
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      )
     }
     return(
       <div>
         <Header />
         <Grid>
-          <Grid.Column width={8}>
+          <Grid.Column width={8} style={{paddingRight: '0px'}}>
             <TripsSummaryUser user={user} sendTripData={this.getTripData.bind(this)}/>
           </Grid.Column>
-          <Grid.Column width={8}>
+          <Grid.Column width={8} style={{paddingLeft: '0px'}}>
             <Segment>
               <SummaryTripMap trips={this.state.trips}/>
             </Segment>

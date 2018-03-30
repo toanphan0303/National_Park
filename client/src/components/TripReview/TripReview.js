@@ -1,7 +1,6 @@
 import React , {Component} from 'react'
-import ImageGallery from 'react-image-gallery';
 import fetchTrip from '../queries/fetchTrip'
-import Map from '../../MapComponents/Map'
+import Map from '../../MapComponents/newMap'
 import Blog from '../Blog'
 import renderHTML from 'react-render-html';
 import {Grid, Image, Segment, Card, Button, Form, Step,Icon, Tab, Container} from 'semantic-ui-react'
@@ -9,6 +8,7 @@ import ImgGallery from 'react-image-gallery';
 import Header from '../Header'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import _ from 'lodash'
+import style from '../../style/TripReview.css'
 
 import {graphql, compose} from 'react-apollo';
 class TripReview extends Component {
@@ -22,14 +22,13 @@ class TripReview extends Component {
     }
     this.getMapData = this.getMapData.bind(this)
   }
-  
+
   handleLocation(park, treeData){
     let locationList = {}
     if(treeData.length > 1){
       locationList.parkLocation = {lat: park.loc[0], lng: park.loc[1]}
       let arrWayPoints=[];
       locationList.startRoute = true
-      locationList.initial = false
       for(var i= 0; i< treeData.length; i++){
         if(i===0){
           locationList.origin = {lat: treeData[i].activitylocation.loc[0], lng: treeData[i].activitylocation.loc[1]}
@@ -46,15 +45,10 @@ class TripReview extends Component {
     } else if (treeData.length ==1 ){
       locationList.parkLocation= {lat: park.loc[0], lng: park.loc[1]};
       locationList.origin = {lat: treeData[0].activitylocation.loc[0], lng: treeData[0].activitylocation.loc[1]}
-      locationList.destination = {lat: treeData[0].activitylocation.loc[0], lng: treeData[0].activitylocation.loc[1]}
       locationList.startRoute = false
-      locationList.initial = false
     } else{
       locationList.parkLocation= {lat: park.loc[0], lng: park.loc[1]};
-      locationList.origin = {lat: park.loc[0], lng: park.loc[1]};
-      locationList.destination = {lat: park.loc[0], lng: park.loc[1]};
       locationList.startRoute = false
-      locationList.initial = true
     }
     return locationList
   }
@@ -83,7 +77,7 @@ class TripReview extends Component {
   renderImage(){
     const {images} = this.state.currentPoint
     let items =[]
-    if(images){
+    if(images && images.length>0){
       images.map(image =>{
         items.push({
           original: image.url,
@@ -108,7 +102,7 @@ class TripReview extends Component {
       return (
         <div>
           <h3>{note.title}</h3>
-          <div>
+          <div className={style}>
             {renderHTML(note.content)}
           </div>
         </div>
@@ -177,7 +171,7 @@ class TripReview extends Component {
       { menuItem: 'Images',
         pane: (
           <Tab.Pane key='tab1'>
-            <ImgGallery items={this.renderImage()} />
+            {this.state.currentPoint.images && this.state.currentPoint.images.length>0 ? <ImgGallery items={this.renderImage()} />: <div><h4>No images for this location</h4></div>}
           </Tab.Pane>
         ) },
         {menuItem: 'Videos',
@@ -195,16 +189,16 @@ class TripReview extends Component {
     return(
       <div>
         <Header />
-        <Segment>
-          <Step.Group size= 'mini'>
+        <Segment mobile={16} tablet={8} computer={16} style={{marginTop:'0px', padding:'0px 0px'}}>
+          <Step.Group size= 'mini' >
             {this.renderStep()}
           </Step.Group>
         </Segment>
         <Grid>
-          <Grid.Column  width={8}>
+          <Grid.Column  width={8} style={{paddingLeft:'0px', paddingTop: '0px', paddingRight:'0px'}} mobile={16} tablet={8} computer={8}>
             <Tab panes={panes} renderActiveOnly={false} />
           </Grid.Column>
-          <Grid.Column  width={8}>
+          <Grid.Column  width={8} style={{paddingLeft:'0px', paddingTop: '0px', paddingRight:'0px'}} mobile={16} tablet={8} computer={8}>
             <Segment>
               <h3>Your Trip Map</h3>
               <Map locationList={this.state.sumPoint} sendMapData={this.getMapData}  titles={this.state.titles} isMarkerShown />

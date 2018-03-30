@@ -13,7 +13,8 @@ class BlogEditor extends Component {
     this.state= {
       text: "",
       images:[],
-      title:""
+      title:"",
+      buttonLoading: false
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -57,21 +58,32 @@ class BlogEditor extends Component {
     })
   }
   componentWillReceiveProps(nextProps){
-    this.setState({
-
-    })
+    if(nextProps.data.tripPoint.note){
+      const {title, content} = nextProps.data.tripPoint.note
+        this.setState({
+          title,
+          text:content,
+        })
+    }
   }
   componentDidUpdate(){
       const toolbar = this.quillRef.getEditor().getModule('toolbar')
       toolbar.addHandler( 'image', this.handleCustomToolbarButton.bind(this) )
   }
   saveNote= async() =>{
+    this.setState({
+      buttonLoading: true
+    })
     const content = this.state.text
-    const {title} = this.state
+    let {title} = this.state
     const pointId = this.props.data.variables.id
     await this.props.addNote({
       variables: {pointId, title, content}
     })
+    this.setState({
+      buttonLoading: false
+    })
+
   }
   renderImage(){
     const {images} = this.state;
@@ -107,7 +119,7 @@ class BlogEditor extends Component {
                 <Form.Field>
                   <Form.Input placeholder='My Trip to Yellow Stone' onChange={(e) => {this.setState({title:e.target.value})}} />
                 </Form.Field>
-                <Button type='submit' onClick={this.saveNote.bind(this)}>Save</Button>
+                <Button  primary loading={this.state.buttonLoading} type='submit' onClick={this.saveNote.bind(this)}>Save</Button>
               </Form>
             </Segment>
             <Segment>

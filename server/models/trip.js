@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const _ = require('lodash')
 const TripSchema = new Schema({
   title: {type: String},
+  tripImage: {type: String},
   tripPoints: [{
     type: Schema.Types.ObjectId,
     ref: 'trippoint'
@@ -26,10 +27,10 @@ TripSchema.statics.addTripPoint = function(tripId, tripPointId){
       return trip.populate()
     })
 }
-TripSchema.statics.addTrip = async function(user, title, park){
+TripSchema.statics.addTrip = async function(user, title, tripImage, park){
   const User = mongoose.model('user')
   const userObj= await User.findById(user)
-  return new this({user, title, park}).save()
+  return new this({user, title, tripImage, park}).save()
     .then(trip => {
       userObj.trips.push(trip)
       userObj.save((err) => {
@@ -62,4 +63,5 @@ TripSchema.statics.obmitPointFromTrip = function(tripId, pointId){
     return trip.populate
   })
 }
+
 mongoose.model('trip', TripSchema)

@@ -2,11 +2,11 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
-
+const keys = require('../../config/keys')
 passport.use(
   new FacebookStrategy({
-    clientID: '1900907360199847',
-    clientSecret: '44549618ac19472478c131353f9ec250',
+    clientID: keys.fbClientID,
+    clientSecret: keys.fbClientSecrete,
     callbackURL: '/auth/fb/callback',
     proxy: true,
     enableProof: true,

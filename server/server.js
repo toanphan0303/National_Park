@@ -11,13 +11,14 @@ require('./services/googleAuth')
 require('./services/fbAuth')
 const MongoStore = require('connect-mongo')(session);
 const schema = require('./schema/schema')
+const keys = require('../config/keys')
 
 const app = express();
 const options ={
   server: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}},
   replset: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}}
 }
-const MONGO_URI = 'mongodb://toan:toan@ds235418.mlab.com:35418/nps_trial'
+const MONGO_URI = keys.mongoURI
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URI, options);
 mongoose.connection
@@ -27,7 +28,7 @@ mongoose.connection
 app.use(session({
   resave: true,
   saveUnintialized: true,
-  secret: 'mapditthui',
+  secret: keys.cookieSecret,
   store: new MongoStore({
     url: MONGO_URI,
     autoReconnect: true

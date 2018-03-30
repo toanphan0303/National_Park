@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import Modal from 'react-modal';
 import ImageUpload from '../ImageUpload'
-import { Segment, Button, Divider } from 'semantic-ui-react'
+import {graphql, compose} from 'react-apollo';
+import { Segment, Button, Divider,Dimmer,Loader } from 'semantic-ui-react'
 const customStyles = {
   content : {
     top                   : '50%',
@@ -9,7 +10,9 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    height                : '500px',
+    overflow              : 'scroll'
   }
 };
 class ImageUploadModal extends Component{
@@ -58,6 +61,7 @@ class ImageUploadModal extends Component{
         />
         <Divider horizontal></Divider>
         <button onClick={this.closeModal}>Cancel</button>
+
       </Modal>
     );
   }

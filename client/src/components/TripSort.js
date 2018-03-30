@@ -36,7 +36,7 @@ export default class TripSort extends Component {
     };
     const getNodeKey = ({ treeIndex }) => treeIndex;
     return (
-      <div style={{ height: 300 }}>
+      <div style={{ height: '442px' }}>
         <SortableTree
           treeData={this.state.treeData}
           canDrop={canDrop}

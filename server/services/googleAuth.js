@@ -2,11 +2,12 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
+const keys = require('../../config/keys')
 
 passport.use(
   new GoogleStrategy({
-    clientID: '934715185016-mseglhk5gc2n0fsilhlpbmhdd3es9763.apps.googleusercontent.com',
-    clientSecret: 'wwS7CB0H_DpHWmIC4ufK7vrG',
+    clientID: keys.googleClientID,
+    clientSecret: keys.googleClientSecret,
     callbackURL: '/auth/google/callback',
     proxy: true
   },
