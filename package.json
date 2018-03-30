@@ -6,7 +6,7 @@
   "scripts": {
     "server": "nodemon index.js --ignore client",
     "dev": "nodemon index.js --ignore client",
-    "start": "nodemon index.js --ignore client"
+    "start": "node index.js --ignore client"
   },
   "author": "",
   "license": "ISC",
