@@ -24,7 +24,11 @@ module.exports = app =>{
                 }
             },
         (req, res) => { // On success, redirect back to '/'
+          if(process.env.NODE_ENV === 'production'){
+              res.redirect('https://npsplanner.herokuapp.com/');
+          } else {
             res.redirect('https://localhost:5000/#/');
+          }
         }
     );
 }
