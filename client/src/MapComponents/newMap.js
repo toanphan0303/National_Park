@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
+import keys from '../../../config/keys'
 import {
   withScriptjs,
   withGoogleMap,
@@ -11,7 +12,7 @@ import { compose, withProps, lifecycle ,withHandlers} from "recompose";
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyDO1OZrmzTeZd8kTN-GDb-TY5KaiH2kdOQ",
+      "https://maps.googleapis.com/maps/api/js?libraries=visualization&key="+keys.googleMapAPI,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,

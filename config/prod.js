@@ -7,5 +7,6 @@ module.exports ={
   mongoURI: process.env.MONGO_URI,
   awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ,
-  S3Bucket: process.env.S3_BUCKET
+  S3Bucket: process.env.S3_BUCKET,
+  googleMapAPI: process.env.GOOGLE_MAP_API
 }
