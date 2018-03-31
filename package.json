@@ -6,8 +6,10 @@
   "scripts": {
     "server": "nodemon index.js --ignore client",
     "dev": "nodemon index.js",
-    "start": "node index.js --ignore client"
+    "start": "node index.js --ignore client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
+
   "engines":{
     "node": "9.3.0",
     "npm": "5.6.0"
