@@ -6,12 +6,11 @@ import {graphql} from 'react-apollo'
 import {Link} from 'react-router'
 import _ from 'lodash'
 import { Segment, Card, Image,Rating,Loader, Dimmer} from 'semantic-ui-react'
-const IMG_PATH = '../static_assets/nps_images/'
 class ParkList extends Component {
   renderNpsContent() {
     const popular = _.intersectionBy(this.props.data.parks,npsName, 'title')
     return popular.map(({id, title}) =>{
-      const img = require(`../static_assets/nps_images/${title}.jpg`)
+      const img = 'https://s3.amazonaws.com/user-upload-image/National_park/'+ title.split(' ').join('+')+'.jpg'
       return(
         <div key={id}>
           <Card link={true} href={`/#/parks/${id}`} style={{margin: '10px 10px', width:'250px', borderWidth:'thin', borderStyle:'solid', borderColor:'rgba(34,36,38,.15)'}}>

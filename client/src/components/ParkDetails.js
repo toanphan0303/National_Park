@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import Header from './Header'
 import fetchPark from './queries/fetchPark'
-import Map from '../MapComponents/Map';
 import Trip from './Trip'
 import _ from 'lodash'
 import'../style/ParkDetails.css'

@@ -8,7 +8,7 @@ import { Segment, Card, Image,Rating} from 'semantic-ui-react'
 class AllParkList extends Component {
   renderNpsContent() {
     return this.props.data.parks.map(({id, title}) =>{
-      const img = require(`../static_assets/nps_images/${title}.jpg`)
+      const img = 'https://s3.amazonaws.com/user-upload-image/National_park/'+ title.split(' ').join('+')+'.jpg'
       return(
         <div key={id}>
           <Card link={true} href={`/#/parks/${id}`} style={{margin: '10px 10px', width:'250px', borderWidth:'thin', borderStyle:'solid', borderColor:'rgba(34,36,38,.15)'}}>

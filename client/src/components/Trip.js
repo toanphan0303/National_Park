@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Grid, Image, Segment, Button, Form,Container, Header} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import {Link,hashHistory} from 'react-router';
-import TestMap from '../MapComponents/testMap'
 import Map from '../MapComponents/newMap'
 import TripSort from './TripSort'
 import addTrip from './mutations/addTrip'
