@@ -13,7 +13,7 @@ import { compose, withProps, lifecycle ,withHandlers} from "recompose";
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?libraries=visualization&key="+keys.googleMapAPI,
+      "https://maps.googleapis.com/maps/api/js?libraries=visualization&key="+process.env.GOOGLE_MAP_API,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
