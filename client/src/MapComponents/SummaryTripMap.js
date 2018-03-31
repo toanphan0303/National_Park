@@ -1,5 +1,6 @@
 import React from 'react'
 const fetch = require("isomorphic-fetch");
+import keys from '../../../config/keys'
 const { compose, withProps, withHandlers } = require("recompose");
 const {
   withScriptjs,
@@ -8,10 +9,9 @@ const {
   Marker,
 } = require("react-google-maps");
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
-
 const MapWithAMarkerClusterer = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?libraries=visualization&key=AIzaSyDO1OZrmzTeZd8kTN-GDb-TY5KaiH2kdOQ",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?libraries=visualization&key"+keys.googleMapAPI,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,

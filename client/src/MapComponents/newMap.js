@@ -8,6 +8,7 @@ import {
   DirectionsRenderer,
   Marker,
 } from 'react-google-maps';
+console.log(keys.googleMapAPI)
 import { compose, withProps, lifecycle ,withHandlers} from "recompose";
 const MyMapComponent = compose(
   withProps({
