@@ -7,7 +7,7 @@
     "set:env": "node setEnv.js > .env",
     "server": "nodemon index.js --ignore client",
     "dev": "npm run set:env && env-cmd .env nodemon index.js",
-    "start": "node index.js --ignore client"
+    "start": "npm run set:env && env-cmd .env node index.js --ignore client"
   },
   "engines": {
     "node": "9.3.0",
