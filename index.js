@@ -1,9 +1,7 @@
 const https = require('https')
 const pem = require('pem')
 const PORT = process.env.PORT || 5000;
-const keys = require('./config/keys')
 if(process.env.NODE_ENV === 'production'){
-  console.log('keys= ',keys)
   const app = require('./server/server');
   app.listen(PORT || 5000, () =>{
     console.log('app listening on port', PORT)
