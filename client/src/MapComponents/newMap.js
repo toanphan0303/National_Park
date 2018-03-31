@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import keys from '../../../config/keys'
+const keys = require('../../../config/keys');
 import {
   withScriptjs,
   withGoogleMap,
