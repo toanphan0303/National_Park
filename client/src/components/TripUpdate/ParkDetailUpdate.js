@@ -22,7 +22,7 @@ class ParkDetail extends Component {
   addActivity= async({id, title,name, description, url, loc}) =>{
     const point = () => {
       return this.props.createPoint({
-        variables: {image:"", video:"", note:""}
+        variables: {images:[], videos:[], note:""}
       })
     }
     const addLocPt = (tripPointId, activitylocationId) =>{
@@ -41,9 +41,9 @@ class ParkDetail extends Component {
       const pointData = await point();
       const pointId = pointData.data.addTripPoint.id;
       const ptn = await addLocPt(pointId, id)
-      const {video, image, note} = ptn.data.addActivityLocationToTripPoint;
+      const {videos, images, note} = ptn.data.addActivityLocationToTripPoint;
       const ptnID = ptn.data.addActivityLocationToTripPoint.id
-      temp = ({id:ptnID, video, image, note})
+      temp = ({id:ptnID,title, videos:[], images:[], note:""})
       temp.activitylocation ={id, title, name, description, url, loc}
       const tripId = this.props.params.id
       await addLocPtTrip(tripId,pointId)
@@ -72,7 +72,7 @@ class ParkDetail extends Component {
     temp = _.differenceBy(temp, tempTreeData, 'id')
     this.setState({
       activityPoints: temp
-    }, () => { console.log('')})
+    }, () => { return})
   }
   renderCard(){
     return this.state.activityPoints.map(({id, title,name, description, url, loc}) =>{

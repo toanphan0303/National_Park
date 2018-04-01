@@ -87,7 +87,6 @@ class TripSortUpdate extends Component {
       }
       return true;
     };
-    const getNodeKey = ({ treeIndex }) => treeIndex;
     if(!this.props.data.trip){
       return (
         <Dimmer active>
@@ -95,6 +94,8 @@ class TripSortUpdate extends Component {
         </Dimmer>
       )
     }
+    const getNodeKey = ({ treeIndex }) => treeIndex;
+    console.log('this.state.treeData ', this.state.treeData)
     return (
       <div style={{ height:'435px' }}>
         <SortableTree
