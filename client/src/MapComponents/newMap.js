@@ -7,8 +7,8 @@ import {
   DirectionsRenderer,
   Marker,
 } from 'react-google-maps';
-console.log(process.env.GOOGLE_MAP_API)
 import { compose, withProps, lifecycle ,withHandlers} from "recompose";
+console.log(process.env.GOOGLE_MAP_API)
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
@@ -78,7 +78,6 @@ const MyMapComponent = compose(
             let duration = 0;
             let tripDistance =[]
             let tripDuration =[]
-            console.log('result ', result)
             if(result.rows.length>1){
               for(let i =0; i< result.rows.length; i++){
                 distance += result.rows[i].elements[i].distance.value
@@ -160,7 +159,6 @@ const MyMapComponent = compose(
             let duration = 0;
             let tripDistance =[]
             let tripDuration =[]
-            console.log('result componentWillReceiveProps', result)
             if(result.rows.length>1){
               for(let i =0; i< result.rows.length; i++){
                 distance += result.rows[i].elements[i].distance.value
@@ -181,7 +179,7 @@ const MyMapComponent = compose(
               nextProps.sendMapData(this.state.distance, this.state.duration, this.state.tripDistance, this.state.tripDuration)
             })
           }else{
-            console.log(status)
+
           }
         })
       }

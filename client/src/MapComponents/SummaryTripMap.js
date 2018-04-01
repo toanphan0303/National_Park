@@ -10,7 +10,7 @@ const {
 const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 const MapWithAMarkerClusterer = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?libraries=visualization&key"+process.env.GOOGLE_MAP_API,
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?libraries=visualization&key="+process.env.GOOGLE_MAP_API,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
@@ -18,8 +18,6 @@ const MapWithAMarkerClusterer = compose(
   withHandlers({
     onMarkerClustererClick: () => (markerClusterer) => {
       const clickedMarkers = markerClusterer.getMarkers()
-      console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-      console.log(clickedMarkers)
     },
   }),
   withScriptjs,

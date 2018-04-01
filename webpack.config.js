@@ -20,7 +20,7 @@ module.exports = removeEmpty({
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: ifProduction('[name].[chunkhash].js')
+    filename: '[name].[chunkhash].js'
   },
   module: {
     rules: [

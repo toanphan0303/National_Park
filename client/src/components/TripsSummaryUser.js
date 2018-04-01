@@ -4,7 +4,7 @@ import fetchUser from './queries/CurrentUser'
 import deleteTrip from './mutations/deleteTrip'
 import {Grid, Image, Segment, Button, Card, Rating,Dimmer,Loader} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
-import {Link} from 'react-router'
+import {Link, hashHistory} from 'react-router'
 class TripsSummaryUser extends Component{
   constructor(props){
     super(props)
@@ -16,6 +16,14 @@ class TripsSummaryUser extends Component{
 
   componentDidUpdate(){
     this.props.sendTripData(this.props.data.trips)
+  }
+  handleClickUpdate(parkid, e){
+    const id = e.target.id
+    hashHistory.push(`/parks/${parkid}/trips/${id}`)
+  }
+  handleCLickPreview(e){
+    const id = e.target.id
+    hashHistory.push(`/trips/${id}/tripreview`)
   }
   handleDeleteTrip(e){
     const tripId = e.target.id
@@ -33,7 +41,6 @@ class TripsSummaryUser extends Component{
   }
   renderCard(){
     return this.props.data.trips.map(({id, title, tripImage ,park}) =>{
-      const parkId = park.id;
       return (
         <Card key={id}>
           <Image src={tripImage}  mode={'fill'}/>
@@ -43,16 +50,12 @@ class TripsSummaryUser extends Component{
             </Link>
             <Rating maxRating={5} disabled />
           </Card.Content>
-          <Card.Content extra style={{display:'inline-flex'}}>
-            <div style={{marginRight:'8px'}}>
-              <Link to={`/parks/${parkId}/trips/${id}`}>Update</Link>
-            </div>
-            <div style={{marginLeft:'8px'}}>
-              <Link to={`/trips/${id}/tripreview`}><p>Preview</p></Link>
-            </div>
-            <div style={{marginLeft:'8px'}}>
-              <span onClick={this.handleDeleteTrip.bind(this)} id={id}>Delete</span>
-            </div>
+          <Card.Content extra>
+            <Button.Group basic size='tiny'>
+              <Button  color='blue' onClick={this.handleClickUpdate.bind(this, park.id)} id={id} >Update</Button>
+              <Button  color='green' onClick={this.handleCLickPreview.bind(this)} id={id} >Preview</Button>
+              <Button  color='red' onClick={this.handleDeleteTrip.bind(this)} id={id}>Delete</Button>
+            </Button.Group>
           </Card.Content>
         </Card>
       )
@@ -71,7 +74,7 @@ class TripsSummaryUser extends Component{
       <Segment>
         <h3>Your Trips</h3>
         <div style={{ height: '600px', overflowY:'scroll'}}>
-          <Card.Group itemsPerRow={3}>
+          <Card.Group itemsPerRow={2}>
             {this.renderCard()}
           </Card.Group>
         </div>

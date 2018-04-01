@@ -27,9 +27,6 @@ const client = new ApolloClient({
 });
 
 const Root = () => {
-  console.log('GOOGLE_MAP_API',process.env.GOOGLE_MAP_API)
-  console.log('Environment', process.env);
-
   return(
     <ApolloProvider client={client}>
       <Router history={hashHistory}>

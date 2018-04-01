@@ -38,7 +38,7 @@ class ParkDetail extends Component {
     temp = _.differenceBy(temp, treeData, 'id')
     this.setState({
       activityPoints: temp
-    }, () => { console.log('')})
+    }, () => { return})
   }
   renderCard(){
     return this.state.activityPoints.map(({id, title, description, url, loc}) =>{

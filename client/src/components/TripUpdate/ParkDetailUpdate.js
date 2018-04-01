@@ -53,7 +53,7 @@ class ParkDetail extends Component {
     }
     this.setState({
       recentAddPoint: temp
-    }, () =>{console.log('')})
+    }, () =>{return})
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.data.park){
