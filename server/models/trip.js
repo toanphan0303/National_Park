@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const timestamps = require('mongoose-timestamp');
 const _ = require('lodash')
 const TripSchema = new Schema({
   title: {type: String},
@@ -16,8 +17,14 @@ const TripSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'park'
   },
+  comments:[
+      {
+          type: Schema.Types.ObjectId,
+          ref: "comment"
+      }
+  ]
 })
-
+TripSchema.plugin(timestamps);
 TripSchema.statics.addTripPoint = function(tripId, tripPointId){
 
   return this.findById(tripId)
@@ -46,6 +53,11 @@ TripSchema.statics.findTripPoints = function(id){
     .populate('tripPoints')
     .then(trip => trip.tripPoints)
 }
+TripSchema.statics.findComments = function(id){
+  return this.findById(id)
+    .populate('comments')
+    .then(trip => trip.comments)
+}
 TripSchema.statics.orderPointsInTrip = function(tripId, pointOrder){
   return this.update({"_id":tripId}, {"$set":{tripPoints: pointOrder}})
     .then(result => this.findById(tripId)
@@ -62,6 +74,19 @@ TripSchema.statics.obmitPointFromTrip = function(tripId, pointId){
     })
     return trip.populate
   })
+}
+TripSchema.statics.addCommentToTrip = function(tripId, userId, content){
+  const Comment = mongoose.model('comment')
+  const User = mongoose.model('user')
+  return this.findById(tripId)
+    .then(async trip =>{
+      const commentObj = new Comment({content, user:userId, trip:tripId})
+      trip.comments.push(commentObj)
+      const user = await User.findById(userId)
+      user.comments.push(commentObj)
+      return Promise.all([commentObj.save(), trip.save(), user.save()])
+        .then(([commentObj, trip]) => trip)
+    })
 }
 
 mongoose.model('trip', TripSchema)

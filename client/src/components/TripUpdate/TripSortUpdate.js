@@ -95,7 +95,6 @@ class TripSortUpdate extends Component {
       )
     }
     const getNodeKey = ({ treeIndex }) => treeIndex;
-    console.log('this.state.treeData ', this.state.treeData)
     return (
       <div style={{ height:'435px' }}>
         <SortableTree

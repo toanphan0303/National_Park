@@ -11,6 +11,16 @@ export default gql`
         title
         loc
       }
+      comments{
+        id
+        content
+        user {
+          id
+          avatar
+          firstName
+          lastName
+        }
+      }
       tripPoints{
         id
         images{

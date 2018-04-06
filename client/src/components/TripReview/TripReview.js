@@ -1,16 +1,19 @@
 import React , {Component} from 'react'
 import fetchTrip from '../queries/fetchTrip'
+import addCommentToTrip from '../mutations/addCommentToTrip'
 import Map from '../../MapComponents/newMap'
 import Blog from '../Blog'
 import renderHTML from 'react-render-html';
 import {Grid, Image, Segment, Card, Button, Form, Step,Icon, Tab, Container} from 'semantic-ui-react'
 import ImgGallery from 'react-image-gallery';
 import Header from '../Header'
+import Comments from './Comments'
+import TripInfo from './TripInfo'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import _ from 'lodash'
 import style from '../../style/TripReview.css'
 
-import {graphql, compose} from 'react-apollo';
+import {graphql, compose, withApollo} from 'react-apollo';
 class TripReview extends Component {
   constructor(props){
     super(props)
@@ -18,7 +21,9 @@ class TripReview extends Component {
       sumPoint: {},
       currentPoint: {},
       tripDistance:[],
-      titles:[]
+      titles:[],
+      comments:[],
+      comment:""
     }
     this.getMapData = this.getMapData.bind(this)
   }
@@ -56,16 +61,29 @@ class TripReview extends Component {
     if(nextProps.data.trip){
       const treeData = nextProps.data.trip.tripPoints
       const {park} = nextProps.data.trip
+      const {comments} = nextProps.data.trip
       const locationList = this.handleLocation(park, treeData);
       const titles = this.getTitleFromActLoc(treeData)
-      if(!(_.isEqual(this.state.sumPoint,locationList))){
+
         this.setState({
           sumPoint : locationList,
           currentPoint: treeData[0],
-          titles
-        },() => {return })
-      }
+          titles,
+          comments
+        },() => {return})
+
     }
+  }
+  handleAddComment(){
+    return this.props.client.mutate({
+      mutation: addCommentToTrip,
+      variables: {tripId:this.props.params.id,userId:this.props.user.id,content: this.state.comment},
+      refetchQueries: [{query:fetchTrip, variables:{id: this.props.params.id}}]
+    })
+      .catch(res => {
+      const errors = res.graphQLErrors.map(error => error.message)
+      this.setState({errors})
+    })
   }
   getTitleFromActLoc(points){
     let titles=[]
@@ -135,6 +153,11 @@ class TripReview extends Component {
       currentPoint:point
     }, () =>{return})
   }
+  handleComment(e){
+    this.setState({
+      comment: e.target.value
+    })
+  }
   getMapData(meter, secs, tripDistance, tripDuration){
     const distance = (meter*0.000621371).toFixed(2);
     const duration = (secs/60).toFixed(2);
@@ -145,16 +168,7 @@ class TripReview extends Component {
       tripDuration
     })
   }
-  generateTrip(){
-    let i =-1 ;
-    if(_.isEmpty(this.state.tripDistance)){
-      return <div>No point is created</div>
-    }
-    return this.state.tripDistance.map( trD =>{
-      i++
-      return(<div key={trD}> From point {String.fromCharCode('A'.charCodeAt(0) + i)} to point {String.fromCharCode('A'.charCodeAt(0) +i+1)} : {(trD*0.000621371).toFixed(2)}  </div>)
-    })
-  }
+
   render(){
     if(!this.props.data.trip){
       return(<div>Loading....</div>)
@@ -204,21 +218,25 @@ class TripReview extends Component {
               <Map locationList={this.state.sumPoint} sendMapData={this.getMapData}  titles={this.state.titles} isMarkerShown />
             </Segment>
             <Segment>
-              <Container fluid>
-                <h4>Trip Infomation</h4>
-                {this.generateTrip()}
-                <p>Trip distance: {this.state.distance} miles</p>
-                <p>Trip duration: {this.state.duration} minutes (travel by foot)</p>
-              </Container>
+              <TripInfo tripDistance={this.state.tripDistance} distance={this.state.distance} duration={this.state.duration}/>
             </Segment>
           </Grid.Column>
         </Grid>
+        <Segment mobile={16} tablet={8} computer={16}>
+          <Comments comments={this.state.comments}/>
+          <Form size='small'>
+            <Form.Input style={{width:'500px', height:'50px'}} onChange={this.handleComment.bind(this)} />
+            <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />
+          </Form>
+        </Segment>
       </div>
     )
   }
 }
 export default compose(
+  withApollo,
   graphql(fetchTrip, {
     options: (props) => { return {variables: { id: props.params.id}}}
-  })
+  }),
+  graphql(addCommentToTrip)
 )(TripReview)

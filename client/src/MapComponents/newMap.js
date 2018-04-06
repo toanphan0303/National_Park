@@ -8,7 +8,6 @@ import {
   Marker,
 } from 'react-google-maps';
 import { compose, withProps, lifecycle ,withHandlers} from "recompose";
-console.log(process.env.GOOGLE_MAP_API)
 const MyMapComponent = compose(
   withProps({
     googleMapURL:

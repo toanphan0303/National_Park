@@ -6,3 +6,4 @@ require('./trip');
 require('./image');
 require('./video');
 require('./note')
+require('./comment')

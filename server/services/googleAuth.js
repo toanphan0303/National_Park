@@ -16,6 +16,9 @@ passport.use(
     if(existingUser){
       return done(null, existingUser)
     } else{
+      let name = profile.displayName.split(" ")
+      const firstName = name[0]
+      const lastName = name[1]
       const user = await new User({googleId: profile.id, avatar: profile.photos[0].value, email:profile.emails[0].value}).save()
       done(null, user)
     }

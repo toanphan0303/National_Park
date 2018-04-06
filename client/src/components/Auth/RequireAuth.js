@@ -14,7 +14,6 @@ export default(WrappedComponent) => {
       }
     }
     render(){
-      console.log(this.props.data)
       if(!this.props.data.user){
         return(
           <AuthModal
@@ -22,7 +21,7 @@ export default(WrappedComponent) => {
           />
         )
       }
-      return <WrappedComponent {...this.props} />
+      return <WrappedComponent user={this.props.data.user} {...this.props} />
     }
   }
 

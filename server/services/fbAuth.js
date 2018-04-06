@@ -17,7 +17,10 @@ passport.use(
     if(existingUser){
       return done(null, existingUser)
     } else{
-      const user = await new User({facebookId: profile.id, avatar: profile.photos[0].value}).save()
+      let name = profile.displayName.split(" ")
+      const firstName = name[0]
+      const lastName = name[1]
+      const user = await new User({facebookId: profile.id, avatar: profile.photos[0].value, firstName, lastName}).save()
       done(null, user)
     }
   })

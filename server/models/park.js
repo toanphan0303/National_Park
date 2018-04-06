@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const timestamps = require('mongoose-timestamp');
 const ParkSchema = new Schema({
   title: { type: String},
   loc: {
@@ -12,7 +12,7 @@ const ParkSchema = new Schema({
     ref: 'activitylocation'
   }]
 })
-
+ParkSchema.plugin(timestamps);
 ParkSchema.statics.addActivityLocation = function(id,title, description, name, url, loc){
   const Activitylocation = mongoose.model('activitylocation')
   return this.findById(id)

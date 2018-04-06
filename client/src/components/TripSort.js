@@ -35,7 +35,6 @@ export default class TripSort extends Component {
       return true;
     };
     const getNodeKey = ({ treeIndex }) => treeIndex;
-    console.log('this.state.treeData ', this.state.treeData)
     return (
       <div style={{ height: '442px' }}>
         <SortableTree

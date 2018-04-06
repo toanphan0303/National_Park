@@ -27,8 +27,8 @@ passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)
   });
 }));
 
-function signup({email, password, req}){
-  const user = new User({email, password});
+function signup({email, password,firstName, lastName, req}){
+  const user = new User({email, password, firstName, lastName});
   if(!email || !password){ throw new Error('Please provide email and password');}
   return User.findOne({email})
     .then(existingUser => {

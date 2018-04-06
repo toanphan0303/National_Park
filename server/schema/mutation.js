@@ -28,10 +28,12 @@ const mutation = new GraphQLObjectType({
       type: UserType,
       args : {
         email: {type: GraphQLString},
-        password: {type: GraphQLString}
+        password: {type: GraphQLString},
+        firstName: {type: GraphQLString},
+        lastName: {type: GraphQLString}
       },
-      resolve(parentValue, {email, password}, req){
-        return AuthService.signup({email, password, req})
+      resolve(parentValue, {email, password, firstName, lastName}, req){
+        return AuthService.signup({email, password,firstName,lastName, req})
       }
     },
     logout: {
@@ -96,6 +98,17 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {id, tripId}){
         return User.deleteTrip(id,tripId)
+      }
+    },
+    addCommentToTrip: {
+      type: TripType,
+      args: {
+        tripId: { type: new GraphQLNonNull(GraphQLID)},
+        userId: { type: new GraphQLNonNull(GraphQLID)},
+        content: {type: new GraphQLNonNull(GraphQLString)},
+      },
+      resolve(parentValue, {tripId, userId, content}){
+        return Trip.addCommentToTrip(tripId, userId, content)
       }
     },
     addTripPointToTrip: {
@@ -216,7 +229,6 @@ const mutation = new GraphQLObjectType({
         return TripPoint.deleteImage(pointId, imgId)
       }
     }
-
   }
 })
 module.exports = mutation;

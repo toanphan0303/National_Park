@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const timestamps = require('mongoose-timestamp');
 const TripPointSchema = new Schema({
   title: String,
   images:[{
@@ -19,7 +20,7 @@ const TripPointSchema = new Schema({
     ref: 'activitylocation'
   }
 })
-
+TripPointSchema.plugin(timestamps);
 TripPointSchema.statics.addLocation = async function(tripPointId, activitylocationId){
   const Activitylocation = mongoose.model('activitylocation')
   const ActLocObject = await Activitylocation.findById(activitylocationId)

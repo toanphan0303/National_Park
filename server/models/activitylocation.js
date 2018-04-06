@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const timestamps = require('mongoose-timestamp');
 
 const ActivityLocationSchema = new Schema({
   title: {type: String},
@@ -14,6 +15,7 @@ const ActivityLocationSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'park'
   }
-})
+});
+ActivityLocationSchema.plugin(timestamps);
 
 mongoose.model('activitylocation', ActivityLocationSchema)

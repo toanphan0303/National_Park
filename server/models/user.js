@@ -2,18 +2,25 @@ const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const timestamps = require('mongoose-timestamp');
 const UserSchema = new Schema({
   email: String,
   password: String,
   googleId: String,
   facebookId: String,
+  firstName: String,
+  lastName: String,
   avatar:String,
   trips: [{
     type: Schema.Types.ObjectId,
     ref: 'trip'
   }],
+  comments:[{
+    type: Schema.Types.ObjectId,
+    ref: 'comment'
+  }]
 });
-
+UserSchema.plugin(timestamps);
 UserSchema.pre('save', function save(next){
   const user = this;
   if(!user.isModified('password')){

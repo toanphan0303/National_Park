@@ -4,9 +4,11 @@ const {GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList,GraphQLFloat} = 
 const TripPointType = require ('./trippoint_type');
 const UserType = require('./user_type')
 const ParkType = require('./park_type')
+const CommentType = require('./comment_type')
 const Trip = mongoose.model('trip');
 const User = mongoose.model('user')
 const Park = mongoose.model('park')
+const Comment = mongoose.model('comment')
 const TripType = new GraphQLObjectType({
   name: 'TripType',
   fields: () => ({
@@ -29,6 +31,12 @@ const TripType = new GraphQLObjectType({
       type: ParkType,
       resolve(parentValue){
         return Park.findById(parentValue.park)
+      }
+    },
+    comments:{
+      type:  new GraphQLList(CommentType),
+      resolve(parentValue){
+        return Trip.findComments(parentValue.id)
       }
     }
   })
