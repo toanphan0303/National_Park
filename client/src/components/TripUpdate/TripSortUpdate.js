@@ -1,19 +1,21 @@
 import React, { Component } from "react";
 import fetchTrip from '../queries/fetchTrip'
 import deleteTripPoint from '../mutations/deleteTripPoint'
+import togglePublicSetting from '../mutations/togglePublicSetting'
 import omitPointFromTrip from '../mutations/omitPointFromTrip'
 import SortableTree, {removeNodeAtPath} from "react-sortable-tree";
 import ImageUploadModal from '../modals/ImageUploadModal'
 import BlogModal from '../modals/BlogModal'
 import 'react-sortable-tree/style.css';
-import {Icon, Popup, Button, Loader,Dimmer} from 'semantic-ui-react'
+import {Icon, Popup, Button, Loader,Dimmer, Form, Checkbox} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 class TripSortUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       treeData: [],
-      selectPoint: ""
+      selectPoint: "",
+      public: false
     };
   }
   componentDidMount(){
@@ -37,9 +39,11 @@ class TripSortUpdate extends Component {
         treeData.push(temp)
       })
       this.setState({
-        treeData
+        treeData,
+        public : nextProps.data.trip.public
       },() => { return})
     }
+
   }
   componentDidUpdate(){
     this.props.sendTreeData(this.state.treeData)
@@ -59,11 +63,26 @@ class TripSortUpdate extends Component {
       this.childNote.openModal()
     })
   }
-
+  togglePublicSetting = async() =>{
+    const publicState = !this.state.public
+    await this.props.togglePublicSetting({
+      variables: { tripId: this.props.tripId, value: publicState},
+      refetchQueries: [{query:fetchTrip, variables:{id:this.props.tripId} }]
+    }).catch(res => {
+      this.setState({
+        public: publicState
+      })
+      const errors = res.graphQLErrors.map(error => error.message)
+      this.setState({errors})
+    })
+  }
   handleDeleteClick = async({getNodeKey,node, path}) =>{
     const deletePoint = (id) => {
       return this.props.deleteTripPoint({
         variables: {id}
+      }).catch(res => {
+        const errors = res.graphQLErrors.map(error => error.message)
+        this.setState({errors})
       })
     }
     const omitPointFromTrip = (tripId, pointId) => {
@@ -97,6 +116,12 @@ class TripSortUpdate extends Component {
     const getNodeKey = ({ treeIndex }) => treeIndex;
     return (
       <div style={{ height:'435px' }}>
+        <div style={{display:'inline-flex'}}>
+          <h4 style={{paddingRight:'10px'}}>Your Trip</h4>
+          <Form.Field>
+            <Checkbox slider style={{height:'10px'}} onChange={this.togglePublicSetting.bind(this)} label='Visible to public' checked={this.state.public}  />
+          </Form.Field>
+        </div>
         <SortableTree
           treeData={this.state.treeData}
           canDrop={canDrop}
@@ -153,6 +178,9 @@ export default compose(
   }),
   graphql(omitPointFromTrip, {
     name: 'omitPointFromTrip'
+  }),
+  graphql(togglePublicSetting, {
+    name: 'togglePublicSetting'
   }),
   graphql(fetchTrip, {
     options: (props) => { return {variables: { id: props.tripId}}}

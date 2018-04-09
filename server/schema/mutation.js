@@ -5,6 +5,7 @@ const Park = mongoose.model('park');
 const TripPoint = mongoose.model('trippoint')
 const Trip = mongoose.model('trip')
 const User = mongoose.model('user')
+const Rated = mongoose.model('rated')
 const Keys = require('../../config/keys')
 var awsConfig = require('aws-config');
 const {
@@ -14,9 +15,12 @@ const {
   GraphQLList,
   GraphQLFloat,
   GraphQLNonNull,
+  GraphQLBoolean,
+  GraphQLInt
 } = graphql;
 const ParkType = require('./types/park_type')
 const TripType = require('./types/trip_type')
+const RatedType = require('./types/rated_type')
 const TripPointType = require('./types/trippoint_type')
 const UserType = require('./types/user_type');
 const S3PayloadType = require('./types/S3Payload_type')
@@ -54,6 +58,17 @@ const mutation = new GraphQLObjectType({
         return AuthService.login({email, password, req})
       }
     },
+    ratedTrip:{
+      type: UserType,
+      args:{
+        userId:{ type: new GraphQLNonNull(GraphQLID)},
+        tripId:{ type: new GraphQLNonNull(GraphQLID)},
+        value:{ type: new GraphQLNonNull(GraphQLInt)},
+      },
+      resolve(parentValue, {userId, tripId, value}){
+        return User.ratedTrip(userId, tripId, value)
+      }
+    },
     addPark: {
       type: ParkType,
       args: {
@@ -84,7 +99,8 @@ const mutation = new GraphQLObjectType({
         user: {type: new GraphQLNonNull(GraphQLID)},
         tripImage: {type: new GraphQLNonNull(GraphQLString)},
         title: {type: new GraphQLNonNull(GraphQLString)},
-        park: {type: new GraphQLNonNull(GraphQLID)}
+        park: {type: new GraphQLNonNull(GraphQLID)},
+        public: {type: GraphQLBoolean }
       },
       resolve(parentValue, {user, title, tripImage, park}){
         return Trip.addTrip(user, title, tripImage, park)
@@ -98,6 +114,16 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {id, tripId}){
         return User.deleteTrip(id,tripId)
+      }
+    },
+    togglePublicSetting:{
+      type: TripType,
+      args: {
+        tripId: { type: new GraphQLNonNull(GraphQLID)},
+        value:  { type: new GraphQLNonNull(GraphQLBoolean)}
+      },
+      resolve(parentValue, {tripId, value}){
+        return Trip.togglePublicSetting(tripId,value)
       }
     },
     addCommentToTrip: {

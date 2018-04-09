@@ -1,10 +1,12 @@
 const graphql = require('graphql');
 const mongoose = require('mongoose');
+const _ = require('lodash')
 const ParkType = require('./park_type');
 const TripType = require('./trip_type')
 const TripPointType = require('./trippoint_type')
+const RatedType = require('./rated_type')
 const ActivityLocationType = require('./activitylocation_type')
-
+const Rated = mongoose.model('rated')
 const Park = mongoose.model('park');
 const Trip = mongoose.model('trip');
 const User = mongoose.model('user');
@@ -73,6 +75,12 @@ const RootQueryType = new GraphQLObjectType({
         return User.findTrips(id)
       }
     },
+    popularTrips:{
+      type: new GraphQLList(TripType),
+      resolve(){
+        return Trip.find({"public": true})
+      }
+    },
     tripPoint: {
       type: TripPointType,
       args:{
@@ -81,7 +89,23 @@ const RootQueryType = new GraphQLObjectType({
       resolve(parentValue, {id}){
         return TripPoint.findById(id)
       }
-    }
+    },
+    ratedYet:{
+      type: RatedType,
+      args:{
+        userId: {type: new GraphQLNonNull(GraphQLID)},
+        tripId: {type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {userId, tripId}){
+        return Rated.find({user:{ $eq: userId}, trip:{$eq:tripId}})
+          .then(rate =>{
+            if(!_.isEmpty(rate)){
+              return Rated.findById(rate[0]._id)
+            }
+            return rate
+          })
+      }
+    },
   })
 })
 

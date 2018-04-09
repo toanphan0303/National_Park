@@ -46,7 +46,7 @@ class ParkList extends Component {
           <Card.Group>
             {this.renderNpsContent()}
           </Card.Group>
-          <div>
+        <div>
             <Link style={{display:"inline-block", marginTop:'15px'}} to="/parks/" >See all parks</Link>
           </div>
         </div>

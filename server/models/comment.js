@@ -13,4 +13,6 @@ const commentSchema = new mongoose.Schema({
   }
 });
 commentSchema.plugin(timestamps);
+
+
 module.exports = mongoose.model('comment', commentSchema)

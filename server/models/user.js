@@ -18,6 +18,10 @@ const UserSchema = new Schema({
   comments:[{
     type: Schema.Types.ObjectId,
     ref: 'comment'
+  }],
+  rates:[{
+    type: Schema.Types.ObjectId,
+    ref: 'rated'
   }]
 });
 UserSchema.plugin(timestamps);
@@ -40,16 +44,32 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
     cb(err, isMatch)
   })
 }
-
+UserSchema.statics.ratedTrip = async function(userId, tripId, value){
+  const Trip = mongoose.model('trip')
+  const Rated = mongoose.model('rated')
+  const rateObj = await new Rated({user:userId, trip:tripId, rated: value}).save()
+  await Trip.update({_id:tripId}, {$push: {rates: rateObj}})
+  return await this.update({_id: userId},
+    {$push:{rates: rateObj }})
+}
 UserSchema.statics.findTrips = function(id){
   return this.findById(id)
     .populate('trips')
     .then(user => user.trips)
 }
+UserSchema.statics.findComments = function(id){
+  return this.findById(id)
+    .populate('comments')
+    .then(user => user.comments)
+}
+UserSchema.statics.findRates = function(id){
+  return this.findById(id)
+    .populate('rates')
+    .then(user => user.rates)
+}
+
 UserSchema.statics.deleteTrip = function(id, tripId){
   return this.findById(id, (err, user) =>{
-    console.log(user)
-    console.log(tripId)
     user.trips.remove({_id : tripId})
     user.save((err) => {
       if(err){

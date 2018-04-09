@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const graphql = require('graphql');
-const {GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList,GraphQLFloat} = graphql;
+const {GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList,GraphQLFloat, GraphQLBoolean} = graphql;
 const TripPointType = require ('./trippoint_type');
 const UserType = require('./user_type')
 const ParkType = require('./park_type')
@@ -15,6 +15,7 @@ const TripType = new GraphQLObjectType({
     id: {type: GraphQLID},
     title: {type: GraphQLString},
     tripImage: {type: GraphQLString},
+    public: {type: GraphQLBoolean},
     tripPoints: {
       type: new GraphQLList(TripPointType),
       resolve(parentValue){

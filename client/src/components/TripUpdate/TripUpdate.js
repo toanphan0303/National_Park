@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Image, Segment, Button, Form, Container} from 'semantic-ui-react'
+import {Grid, Image, Segment, Button, Form, Container,Checkbox} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import {Link,hashHistory} from 'react-router';
 import Map from '../../MapComponents/newMap'
@@ -125,7 +125,6 @@ class Trip extends Component {
             </Form>
           </Segment>
           <Segment style={{marginTop: '0px'}}>
-            <h3>Your Trip  </h3>
             <TripSortUpdate tripId={this.props.tripid} tripPoint={this.props.Trip} sendTreeData={this.getTreeData}/>
           </Segment>
         </Grid.Column>

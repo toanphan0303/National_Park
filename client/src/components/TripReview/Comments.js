@@ -6,7 +6,6 @@ class Comments extends Component {
 
   renderComments(){
     return this.props.comments.map(comment =>{
-      console.log(comment)
       return(
         <Comment key={comment.id} style={{display:'inline-flex', padding:'10px'}}>
           <Comment.Avatar src={comment.user.avatar}/>

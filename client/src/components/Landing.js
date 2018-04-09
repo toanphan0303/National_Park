@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Header from './Header'
 import ParkList from './ParkList'
 import { Segment} from 'semantic-ui-react'
+import PopularTrips from './PopularTrips'
 const App = (props) => {
   return (
     <div>
@@ -13,16 +14,7 @@ const App = (props) => {
       </Segment>
       <Segment style={{margin:'0px', padding:"0px 100px"}}>
         <div>
-          Popular Trip
-        </div>
-        <div>
-          Popular Trip
-        </div>
-        <div>
-          Popular Trip
-        </div>
-        <div>
-          Popular Trip
+          <PopularTrips />
         </div>
       </Segment>
     </div>

@@ -5,6 +5,7 @@ const _ = require('lodash')
 const TripSchema = new Schema({
   title: {type: String},
   tripImage: {type: String},
+  public: {type: Boolean},
   tripPoints: [{
     type: Schema.Types.ObjectId,
     ref: 'trippoint'
@@ -22,11 +23,22 @@ const TripSchema = new Schema({
           type: Schema.Types.ObjectId,
           ref: "comment"
       }
+  ],
+  likes: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: "like"
+    }
+  ],
+  rates:[
+    {
+      type: Schema.Types.ObjectId,
+      ref: "rated"
+    }
   ]
 })
 TripSchema.plugin(timestamps);
 TripSchema.statics.addTripPoint = function(tripId, tripPointId){
-
   return this.findById(tripId)
     .then(trip => {
       trip.tripPoints.push(tripPointId)
@@ -34,10 +46,11 @@ TripSchema.statics.addTripPoint = function(tripId, tripPointId){
       return trip.populate()
     })
 }
+
 TripSchema.statics.addTrip = async function(user, title, tripImage, park){
   const User = mongoose.model('user')
   const userObj= await User.findById(user)
-  return new this({user, title, tripImage, park}).save()
+  return new this({user, title, tripImage, park, public:false}).save()
     .then(trip => {
       userObj.trips.push(trip)
       userObj.save((err) => {
@@ -47,6 +60,15 @@ TripSchema.statics.addTrip = async function(user, title, tripImage, park){
       })
       return trip.populate()
     })
+}
+TripSchema.statics.togglePublicSetting = function(tripId, value){
+  return this.update({_id:tripId}, {$set: {public: value}}, (err, trip) =>{
+    if(err){
+      console.error(err);
+    } else{
+      return trip
+    }
+  })
 }
 TripSchema.statics.findTripPoints = function(id){
   return this.findById(id)

@@ -4,10 +4,11 @@ import addCommentToTrip from '../mutations/addCommentToTrip'
 import Map from '../../MapComponents/newMap'
 import Blog from '../Blog'
 import renderHTML from 'react-render-html';
-import {Grid, Image, Segment, Card, Button, Form, Step,Icon, Tab, Container} from 'semantic-ui-react'
+import {Grid, Image, Segment, Card, Button, Form, Step,Icon, Tab, Container, Input} from 'semantic-ui-react'
 import ImgGallery from 'react-image-gallery';
 import Header from '../Header'
 import Comments from './Comments'
+import Rated from './Rated'
 import TripInfo from './TripInfo'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import _ from 'lodash'
@@ -64,25 +65,28 @@ class TripReview extends Component {
       const {comments} = nextProps.data.trip
       const locationList = this.handleLocation(park, treeData);
       const titles = this.getTitleFromActLoc(treeData)
-
+      if(!(_.isEqual(this.state.sumPoint,locationList)) || comments != this.state.comments){
         this.setState({
           sumPoint : locationList,
           currentPoint: treeData[0],
           titles,
           comments
         },() => {return})
-
+      }
     }
   }
   handleAddComment(){
-    return this.props.client.mutate({
+    this.props.client.mutate({
       mutation: addCommentToTrip,
       variables: {tripId:this.props.params.id,userId:this.props.user.id,content: this.state.comment},
       refetchQueries: [{query:fetchTrip, variables:{id: this.props.params.id}}]
     })
-      .catch(res => {
-      const errors = res.graphQLErrors.map(error => error.message)
-      this.setState({errors})
+      .then( () => {
+        this.setState({
+          comment:""
+        }, () =>{
+          return
+        })
     })
   }
   getTitleFromActLoc(points){
@@ -174,7 +178,6 @@ class TripReview extends Component {
       return(<div>Loading....</div>)
     }
     const settings={
-
       dots: true,
       infinite: true,
       speed: 500,
@@ -223,9 +226,10 @@ class TripReview extends Component {
           </Grid.Column>
         </Grid>
         <Segment mobile={16} tablet={8} computer={16}>
+          <Rated userId={this.props.user.id} tripId={this.props.data.trip.id}/>
           <Comments comments={this.state.comments}/>
           <Form size='small'>
-            <Form.Input style={{width:'500px', height:'50px'}} onChange={this.handleComment.bind(this)} />
+            <input style={{width:'500px', height:'50px'}} value={this.state.comment} onChange={this.handleComment.bind(this)} />
             <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />
           </Form>
         </Segment>

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const graphql = require('graphql');
 const User = mongoose.model('user')
+const Comment = mongoose.model('comment')
+const Rated = mongoose.model('rated')
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -12,6 +14,8 @@ const UserType = new GraphQLObjectType({
   name: 'UserType',
   fields: () => {
     const TripType = require('./trip_type');
+    const CommentType = require('./comment_type');
+    const RatedType = require('./rated_type')
     return {
       id: {type: GraphQLID},
       email: {type: GraphQLString},
@@ -24,6 +28,18 @@ const UserType = new GraphQLObjectType({
         type: new GraphQLList(TripType),
         resolve(parentValue){
           return User.findTrips(parentValue.id)
+        }
+      },
+      comments:{
+        type: new GraphQLList(CommentType),
+        resolve(parentValue){
+          return User.findComments(parentValue.id)
+        }
+      },
+      rates:{
+        type:new GraphQLList(RatedType),
+        resolve(parentValue){
+          return User.findRates(parentValue.id)
         }
       }
     }
