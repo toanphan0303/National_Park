@@ -6,10 +6,10 @@ const likeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user'
   },
-  trip: {
+  comment: {
     type: Schema.Types.ObjectId,
-    ref: 'trip'
+    ref: 'comment'
   },
 })
-noteSchema.plugin(timestamps);
-mongoose.model('like', noteSchema)
+likeSchema.plugin(timestamps);
+mongoose.model('like', likeSchema)

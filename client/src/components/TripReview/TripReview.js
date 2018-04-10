@@ -27,6 +27,7 @@ class TripReview extends Component {
       comment:""
     }
     this.getMapData = this.getMapData.bind(this)
+    this.getNewLikeAmount = this.getNewLikeAmount.bind(this)
   }
 
   handleLocation(park, treeData){
@@ -76,6 +77,9 @@ class TripReview extends Component {
     }
   }
   handleAddComment(){
+    if(this.state.comment===""){
+      return
+    }
     this.props.client.mutate({
       mutation: addCommentToTrip,
       variables: {tripId:this.props.params.id,userId:this.props.user.id,content: this.state.comment},
@@ -87,6 +91,12 @@ class TripReview extends Component {
         }, () =>{
           return
         })
+    })
+  }
+  getNewLikeAmount = async() =>{
+    await this.props.data.refetch()
+    await this.setState({
+      comments: this.props.data.trip.comments
     })
   }
   getTitleFromActLoc(points){
@@ -227,7 +237,7 @@ class TripReview extends Component {
         </Grid>
         <Segment mobile={16} tablet={8} computer={16}>
           <Rated userId={this.props.user.id} tripId={this.props.data.trip.id}/>
-          <Comments comments={this.state.comments}/>
+          <Comments comments={this.state.comments} sendNewLikeAmount={this.getNewLikeAmount}/>
           <Form size='small'>
             <input style={{width:'500px', height:'50px'}} value={this.state.comment} onChange={this.handleComment.bind(this)} />
             <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />

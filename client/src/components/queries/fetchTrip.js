@@ -21,6 +21,12 @@ export default gql`
           firstName
           lastName
         }
+        likes{
+          id
+          user{
+            id
+          }
+        }
       }
       tripPoints{
         id

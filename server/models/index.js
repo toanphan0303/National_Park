@@ -8,3 +8,4 @@ require('./video');
 require('./note')
 require('./comment')
 require('./rated')
+require('./likes')

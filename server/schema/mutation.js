@@ -6,6 +6,7 @@ const TripPoint = mongoose.model('trippoint')
 const Trip = mongoose.model('trip')
 const User = mongoose.model('user')
 const Rated = mongoose.model('rated')
+const Comment = mongoose.model('comment')
 const Keys = require('../../config/keys')
 var awsConfig = require('aws-config');
 const {
@@ -22,6 +23,7 @@ const ParkType = require('./types/park_type')
 const TripType = require('./types/trip_type')
 const RatedType = require('./types/rated_type')
 const TripPointType = require('./types/trippoint_type')
+const CommentType = require('./types/comment_type')
 const UserType = require('./types/user_type');
 const S3PayloadType = require('./types/S3Payload_type')
 const AuthService = require('../services/auth');
@@ -273,6 +275,16 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {pointId, imgId}){
         return TripPoint.deleteImage(pointId, imgId)
+      }
+    },
+    addLikeToComment:{
+      type:CommentType,
+      args:{
+        userId: { type: new GraphQLNonNull(GraphQLID)},
+        commentId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {userId, commentId}){
+        return Comment.addLikeToComment(userId, commentId)
       }
     }
   }
