@@ -1,4 +1,12 @@
 p img {
   height: 200px;
-  width: 300px
+  width: 300px;
+}
+.avatar img{
+  width:45px;
+  border-color: #bababc;
+  border-radius: 50px;
+  border-width: medium;
+  border-style: solid;
+
 }

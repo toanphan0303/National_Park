@@ -8,6 +8,21 @@ export default gql`
       avatar
       firstName
       lastName
+      follows{
+        id
+        title
+        public
+        tripImage
+        user{
+          id
+          firstName
+          lastName
+        }
+        rates{
+          id
+          rated
+        }
+      }
     }
   }
 `

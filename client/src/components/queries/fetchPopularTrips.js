@@ -12,6 +12,10 @@ export default gql`
         firstName
         lastName
       }
+      rates{
+        id
+        rated
+      }
     }
   }
 `

@@ -12,6 +12,7 @@ import AllParkList from './components/AllParkList'
 import TripsSummary from './components/TripsSummary'
 import RequireAuth from './components/Auth/RequireAuth'
 import ParkDetailUpdate from './components/TripUpdate/ParkDetailUpdate'
+import Follows from './components/Follows/FollowTrips'
 import TripReview from './components/TripReview/TripReview'
 import registerServiceWorker from './registerServiceWorker';
 import 'semantic-ui-css/semantic.min.css'
@@ -35,8 +36,10 @@ const Root = () => {
           <Route path="/parks/" component={AllParkList} />
           <Route path="/parks/:id" component={RequireAuth(ParkDetail)} />
           <Route path="/parks/trips/summary" component={RequireAuth(TripsSummary)} />
-          <Route path="parks/:parkid/trips/:id" component={RequireAuth(ParkDetailUpdate)} />
-          <Route path='trips/:id/tripreview' component={RequireAuth(TripReview)} />
+          <Route path="/parks/:parkid/trips/:id" component={RequireAuth(ParkDetailUpdate)} />
+          <Route path='/trips/:id/tripreview' component={RequireAuth(TripReview)} />
+          <Route path='/trips/:id/tripreview' component={RequireAuth(TripReview)} />
+          <Route path='/profile/follows' component={RequireAuth(Follows)} />
         </Route>
       </Router>
     </ApolloProvider>

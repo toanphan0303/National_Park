@@ -22,6 +22,10 @@ const UserSchema = new Schema({
   rates:[{
     type: Schema.Types.ObjectId,
     ref: 'rated'
+  }],
+  follows:[{
+    type: Schema.Types.ObjectId,
+    ref: 'trip'
   }]
 });
 UserSchema.plugin(timestamps);
@@ -57,17 +61,21 @@ UserSchema.statics.findTrips = function(id){
     .populate('trips')
     .then(user => user.trips)
 }
+UserSchema.statics.findFollowTrips = function(id){
+  return this.findById(id)
+    .populate('follows')
+    .then(user => user.follows)
+}
 UserSchema.statics.findComments = function(id){
   return this.findById(id)
     .populate('comments')
-    .then(user => user.comments)
+    .then(user => console.log(user.comments))
 }
 UserSchema.statics.findRates = function(id){
   return this.findById(id)
     .populate('rates')
     .then(user => user.rates)
 }
-
 UserSchema.statics.deleteTrip = function(id, tripId){
   return this.findById(id, (err, user) =>{
     user.trips.remove({_id : tripId})
@@ -78,7 +86,29 @@ UserSchema.statics.deleteTrip = function(id, tripId){
     })
     return user.populate
   })
+}
+UserSchema.statics.deleteFollowTrip = function(id, tripId){
+  return this.findById(id, (err, user) =>{
+    user.follows.remove({_id : tripId})
+    user.save((err) => {
+      if(err){
+        console.error('ERROR')
+      }
+    })
+    return user.populate
+  })
+}
 
+UserSchema.statics.addFollowTrip = function(id, tripId){
+  return this.findById(id, (err, user) =>{
+    user.follows.push({_id : tripId})
+    user.save((err) => {
+      if(err){
+        console.error('ERROR')
+      }
+    })
+    return user.populate
+  })
 }
 
 mongoose.model('user', UserSchema)

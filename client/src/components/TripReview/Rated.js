@@ -36,8 +36,8 @@ class Rated extends Component{
       )
     }
     return(
-      <div>
-        <h5>Your Rating</h5>
+      <div style={{paddingLeft:'20px'}}>
+        <h4 style={{marginBottom:'5px'}}>Your Rating</h4>
         {this.state.rated ? <div>You already rated this trip</div> : <div>Please rate this trip</div>}
         <Rating icon='star' maxRating={5} onRate={this.handleRate} disabled={this.state.rated} defaultRating={this.state.rateValue}/>
       </div>

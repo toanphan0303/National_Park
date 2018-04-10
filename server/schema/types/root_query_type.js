@@ -36,6 +36,13 @@ const RootQueryType = new GraphQLObjectType({
         return Park.find({})
       }
     },
+    userFollowTrips:{
+      type: TripType,
+      args: {id: {type: new GraphQLNonNull(GraphQLID)}},
+      resolve(parentValue, {id}){
+        return User.findFollowTrips(id)
+      }
+    },
     park: {
       type: ParkType,
       args: {id: {type: new GraphQLNonNull(GraphQLID)}},
@@ -77,7 +84,7 @@ const RootQueryType = new GraphQLObjectType({
     },
     popularTrips:{
       type: new GraphQLList(TripType),
-      resolve(){
+      async resolve(){
         return Trip.find({"public": true})
       }
     },

@@ -41,6 +41,18 @@ const UserType = new GraphQLObjectType({
         resolve(parentValue){
           return User.findRates(parentValue.id)
         }
+      },
+      trips: {
+        type: new GraphQLList(TripType),
+        resolve(parentValue){
+          return User.findTrips(parentValue.id)
+        }
+      },
+      follows:{
+        type: new GraphQLList(TripType),
+        resolve(parentValue){
+          return User.findFollowTrips(parentValue.id)
+        }
       }
     }
   }

@@ -106,6 +106,16 @@ const mutation = new GraphQLObjectType({
         return Trip.addTrip(user, title, tripImage, park)
       }
     },
+    addFollowTrip:{
+      type: TripType,
+      args:{
+        id: { type: new GraphQLNonNull(GraphQLID)},
+        tripId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {id, tripId}){
+        return User.addFollowTrip(id,tripId)
+      }
+    },
     deleteTrip:{
       type: UserType,
       args:{
@@ -114,6 +124,16 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {id, tripId}){
         return User.deleteTrip(id,tripId)
+      }
+    },
+    deleteFollowTrip:{
+      type: UserType,
+      args:{
+        id: { type: new GraphQLNonNull(GraphQLID)},
+        tripId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {id, tripId}){
+        return User.deleteFollowTrip(id,tripId)
       }
     },
     togglePublicSetting:{

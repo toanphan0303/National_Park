@@ -80,6 +80,13 @@ TripSchema.statics.findComments = function(id){
     .populate('comments')
     .then(trip => trip.comments)
 }
+
+TripSchema.statics.findRates = function(id){
+  return this.findById(id)
+    .populate('rates')
+    .then(trip => trip.rates)
+}
+
 TripSchema.statics.orderPointsInTrip = function(tripId, pointOrder){
   return this.update({"_id":tripId}, {"$set":{tripPoints: pointOrder}})
     .then(result => this.findById(tripId)

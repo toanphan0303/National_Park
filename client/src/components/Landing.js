@@ -10,12 +10,12 @@ const App = (props) => {
         <Header />
       </div>
       <Segment style={{margin:'0px', padding:"0px 100px"}}>
-        <ParkList />
-      </Segment>
-      <Segment style={{margin:'0px', padding:"0px 100px"}}>
-        <div>
+        <div style={{marginBottom:'20px'}}>
           <PopularTrips />
         </div>
+      </Segment>
+      <Segment style={{margin:'0px', padding:"0px 100px"}}>
+        <ParkList />
       </Segment>
     </div>
   )

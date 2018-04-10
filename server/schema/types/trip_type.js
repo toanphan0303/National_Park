@@ -5,6 +5,7 @@ const TripPointType = require ('./trippoint_type');
 const UserType = require('./user_type')
 const ParkType = require('./park_type')
 const CommentType = require('./comment_type')
+const RatedType = require('./rated_type')
 const Trip = mongoose.model('trip');
 const User = mongoose.model('user')
 const Park = mongoose.model('park')
@@ -38,6 +39,12 @@ const TripType = new GraphQLObjectType({
       type:  new GraphQLList(CommentType),
       resolve(parentValue){
         return Trip.findComments(parentValue.id)
+      }
+    },
+    rates:{
+      type: new GraphQLList(RatedType),
+      resolve(parentValue){
+        return Trip.findRates(parentValue.id)
       }
     }
   })

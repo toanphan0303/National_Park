@@ -18,12 +18,6 @@ class ParkList extends Component {
             <Card.Header>
               {title}
             </Card.Header>
-            <Card.Description>
-              High rated
-            </Card.Description>
-            <Card.Description>
-              <Rating icon='heart' defaultRating={4} maxRating={5} />
-            </Card.Description>
           </Card>
         </div>
       )
@@ -40,14 +34,16 @@ class ParkList extends Component {
     return (
       <div>
         <div style={{marginBottom:'30px',marginTop:'10px'}}>
-          <h2>Popular National Parks</h2>
+          <div style={{display:'inline-flex'}}>
+            <h2>Popular National Parks</h2>
+            <Link style={{display:"inline-block", marginTop:'10px', marginLeft:'20px'}} to="/parks/" >See all parks</Link>
+          </div>
         </div>
         <div className="col s12 m6 l3">
           <Card.Group>
             {this.renderNpsContent()}
           </Card.Group>
         <div>
-            <Link style={{display:"inline-block", marginTop:'15px'}} to="/parks/" >See all parks</Link>
           </div>
         </div>
       </div>

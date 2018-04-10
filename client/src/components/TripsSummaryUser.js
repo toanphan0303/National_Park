@@ -13,7 +13,6 @@ class TripsSummaryUser extends Component{
       allTrip:[]
     }
   }
-
   componentDidUpdate(){
     this.props.sendTripData(this.props.data.trips)
   }

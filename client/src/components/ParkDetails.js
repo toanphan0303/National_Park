@@ -33,7 +33,6 @@ class ParkDetail extends Component {
     }
   }
   getRemainActPoint(treeData){
-
     let temp = [...this.state.origin];
     temp = _.differenceBy(temp, treeData, 'id')
     this.setState({
