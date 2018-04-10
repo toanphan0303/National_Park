@@ -10,15 +10,15 @@ class Comments extends Component {
 
   }
   handleAddLike = async(e) =>{
-    const commentId = e.target.id
+    const commentId = await e.target.value
     const userId = this.props.data.user.id
-    const res =await this.props.addLikeToComment({
+    await this.props.addLikeToComment({
       variables:{
         userId,
         commentId
       }
     })
-    return await this.props.sendNewLikeAmount()
+    return this.props.sendNewLikeAmount()
   }
   renderComments(){
     const userId = this.props.data.user.id
@@ -39,7 +39,7 @@ class Comments extends Component {
                   {comment.content}
                 </Comment.Text>
                 <Button as='div' labelPosition='right' style={{marginLeft:'70px', marginTop:'-10px'}}>
-                  <Button basic  disabled={liked} id={comment.id} onClick ={this.handleAddLike.bind(this)} color='blue' size='mini'>
+                  <Button basic  disabled={liked} value={comment.id} onClick ={this.handleAddLike.bind(this)} color='blue' size='mini'>
                     <Icon name='like' />
                     Like
                   </Button>
