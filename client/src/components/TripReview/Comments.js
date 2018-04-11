@@ -2,20 +2,40 @@ import React , {Component} from 'react'
 import {Button, Form,Comment, Label, Icon} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import addLikeToComment from '../mutations/addLikeToComment'
+import unlikeToComment from '../mutations/unlikeToComment'
 import fetchCurrentUser from '../queries/CurrentUser'
+import fetchTrip from '../queries/fetchTrip'
 import _ from 'lodash'
 class Comments extends Component {
   constructor(props){
     super(props)
-
+    this.handleAddLike = this.handleAddLike.bind(this)
+    this.handleUnlike = this.handleUnlike.bind(this)
   }
-  handleAddLike = async(e) =>{
-    const commentId = await e.target.value
-    const userId = this.props.data.user.id
+  handleLike = async(param, commentId, e) =>{
+     e.preventDefault()
+    if(_.isEmpty(param)){
+      const userId = this.props.data.user.id
+      return await this.handleAddLike({userId, commentId})
+    } else{
+      const likeId = param[0].id
+      return this.handleUnlike({commentId, likeId})
+    }
+  }
+  handleAddLike = async({userId, commentId}) =>{
     await this.props.addLikeToComment({
       variables:{
         userId,
         commentId
+      }
+    })
+    return this.props.sendNewLikeAmount()
+  }
+  handleUnlike= async({commentId, likeId}) =>{
+    await this.props.unlikeToComment({
+      variables:{
+        commentId,
+        likeId
       }
     })
     return this.props.sendNewLikeAmount()
@@ -39,9 +59,9 @@ class Comments extends Component {
                   {comment.content}
                 </Comment.Text>
                 <Button as='div' labelPosition='right' style={{marginLeft:'70px', marginTop:'-10px'}}>
-                  <Button basic  disabled={liked} value={comment.id} onClick ={this.handleAddLike.bind(this)} color='blue' size='mini'>
+                  <Button basic onClick ={this.handleLike.bind(this, userAlreadyLiked, comment.id)} color='blue' size='mini'>
                     <Icon name='like' />
-                    Like
+                      {liked? <span>unlike</span> : <span>like</span>}
                   </Button>
                   <Label as='a' basic color='red' pointing='left'>{likeAmount}</Label>
                </Button>
@@ -53,6 +73,7 @@ class Comments extends Component {
     })
   }
   render() {
+    console.log(this.props)
     return (
       <div style={{display:'inline-grid'}}>
         {this.renderComments()}
@@ -65,5 +86,11 @@ export default compose(
   graphql(addLikeToComment,{
     name:'addLikeToComment'
   }),
-  graphql(fetchCurrentUser)
+  graphql(unlikeToComment, {
+    name:'unlikeToComment'
+  }),
+  graphql(fetchCurrentUser, {
+    name:'data'
+  })
+
 )(Comments);

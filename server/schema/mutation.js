@@ -286,6 +286,16 @@ const mutation = new GraphQLObjectType({
       resolve(parentValue, {userId, commentId}){
         return Comment.addLikeToComment(userId, commentId)
       }
+    },
+    unlikeToComment:{
+      type:CommentType,
+      args:{
+        commentId: { type: new GraphQLNonNull(GraphQLID)},
+        likeId: { type: new GraphQLNonNull(GraphQLID)},
+      },
+      resolve(parentValue, {commentId, likeId}){
+        return Comment.unlikeToComment(commentId,likeId)
+      }
     }
   }
 })

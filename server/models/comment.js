@@ -28,6 +28,17 @@ commentSchema.statics.addLikeToComment = function(userId, commentId){
         .then(([likeObj, comment]) => comment)
     })
 }
+commentSchema.statics.unlikeToComment = function(commentId, likeId){
+  return this.findById(commentId, (err, comment) =>{
+    comment.likes.remove({_id:likeId})
+    comment.save((err) => {
+      if(err){
+        console.error('ERROR')
+      }
+    })
+    return comment.populate()
+  })
+}
 commentSchema.statics.findLikes = function(id){
   return this.findById(id)
     .populate('likes')
