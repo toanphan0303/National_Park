@@ -27,7 +27,6 @@ class TripReview extends Component {
       comment:""
     }
     this.getMapData = this.getMapData.bind(this)
-    this.getNewLikeAmount = this.getNewLikeAmount.bind(this)
   }
 
   handleLocation(park, treeData){
@@ -63,6 +62,7 @@ class TripReview extends Component {
     if(nextProps.data.trip){
       const treeData = nextProps.data.trip.tripPoints
       const {park} = nextProps.data.trip
+      const {id} = nextProps.data.trip
       const {comments} = nextProps.data.trip
       const locationList = this.handleLocation(park, treeData);
       const titles = this.getTitleFromActLoc(treeData)
@@ -71,7 +71,8 @@ class TripReview extends Component {
           sumPoint : locationList,
           currentPoint: treeData[0],
           titles,
-          comments
+          comments,
+          tripId: id
         },() => {return})
       }
     }
@@ -93,12 +94,7 @@ class TripReview extends Component {
         })
     })
   }
-  getNewLikeAmount = async() =>{
-    await this.props.data.refetch()
-    await this.setState({
-      comments: this.props.data.trip.comments
-    })
-  }
+
   getTitleFromActLoc(points){
     let titles=[]
     points.map(ptn =>{
@@ -237,7 +233,7 @@ class TripReview extends Component {
         </Grid>
         <Segment mobile={16} tablet={8} computer={16}>
           <Rated userId={this.props.user.id} tripId={this.props.data.trip.id}/>
-          <Comments comments={this.state.comments} sendNewLikeAmount={this.getNewLikeAmount}/>
+          <Comments id={this.state.tripId} />
           <Form size='small'>
             <input style={{width:'500px', height:'50px'}} value={this.state.comment} onChange={this.handleComment.bind(this)} />
             <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />

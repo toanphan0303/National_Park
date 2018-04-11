@@ -159,6 +159,16 @@ const mutation = new GraphQLObjectType({
         return Trip.addCommentToTrip(tripId, userId, content)
       }
     },
+    removeCommentFromTrip:{
+      type: TripType,
+      args: {
+        tripId: { type: new GraphQLNonNull(GraphQLID)},
+        commentId: { type: new GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parentValue, {tripId, commentId}){
+        return Trip.removeCommentFromTrip(tripId, commentId)
+      }
+    },
     addTripPointToTrip: {
       type: TripType,
       args: {
@@ -295,6 +305,16 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parentValue, {commentId, likeId}){
         return Comment.unlikeToComment(commentId,likeId)
+      }
+    },
+    editCommentContent:{
+      type:CommentType,
+      args:{
+        commentId: { type: new GraphQLNonNull(GraphQLID)},
+        content: {type: new GraphQLNonNull(GraphQLString)}
+      },
+      resolve(parentValue, {commentId, content}){
+        return Comment.editCommentContent(commentId,content)
       }
     }
   }

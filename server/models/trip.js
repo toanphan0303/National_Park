@@ -117,5 +117,16 @@ TripSchema.statics.addCommentToTrip = function(tripId, userId, content){
         .then(([commentObj, trip]) => trip)
     })
 }
+TripSchema.statics.removeCommentFromTrip = function(tripId, commentId){
+  return this.findById(tripId, (err, trip) =>{
+    trip.comments.remove({_id:commentId})
+    trip.save((err) => {
+      if(err){
+        console.error('ERROR')
+      }
+    })
+    return trip.populate()
+  })
+}
 
 mongoose.model('trip', TripSchema)

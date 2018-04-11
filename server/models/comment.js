@@ -44,4 +44,16 @@ commentSchema.statics.findLikes = function(id){
     .populate('likes')
     .then(comment => comment.likes)
 }
+commentSchema.statics.editCommentContent= function(id, content){
+  return this.findById(id)
+    .then(comment =>{
+      comment.content = content
+      comment.save(err =>{
+        if(err){
+          console.error('ERROR')
+        }
+        return comment.populate()
+      })
+    })
+}
 module.exports = mongoose.model('comment', commentSchema)
