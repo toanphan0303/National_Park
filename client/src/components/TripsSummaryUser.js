@@ -5,6 +5,7 @@ import deleteTrip from './mutations/deleteTrip'
 import {Grid, Image, Segment, Button, Card, Rating,Dimmer,Loader} from 'semantic-ui-react'
 import {graphql, compose} from 'react-apollo';
 import {Link, hashHistory} from 'react-router'
+import _ from 'lodash'
 class TripsSummaryUser extends Component{
   constructor(props){
     super(props)
@@ -39,15 +40,25 @@ class TripsSummaryUser extends Component{
     })
   }
   renderCard(){
-    return this.props.data.trips.map(({id, title, tripImage ,park}) =>{
+    console.log(this.props.data)
+    return this.props.data.trips.map(({id, title, tripImage ,park, rates}) =>{
+        let averageRated =0
+      if(!_.isEmpty(rates)){
+        averageRated = _.meanBy(rates, (rate) =>{
+          return rate.rated
+        })
+      }
       return (
         <Card key={id}>
           <Image src={tripImage}  mode={'fill'}/>
           <Card.Content>
             <Link to={`/trips/${id}/tripreview`}>
             <Card.Header>{title}</Card.Header>
-            </Link>
-            <Rating maxRating={5} disabled />
+          </Link>
+            <div style={{display:'inline-flex'}}>
+              <Rating size='mini' icon='star' defaultRating={averageRated} maxRating={5} disabled />
+              <div style={{marginLeft:'10px', marginTop:'-4px',fontSize:'12px'}}>{rates.length}</div>
+            </div>
           </Card.Content>
           <Card.Content extra>
             <Button.Group basic size='tiny'>
@@ -71,7 +82,7 @@ class TripsSummaryUser extends Component{
     }
     return(
       <Segment>
-        <h3>Your Trips</h3>
+        <h2>Your Trips</h2>
         <div style={{ height: '600px', overflowY:'scroll'}}>
           <Card.Group itemsPerRow={2}>
             {this.renderCard()}

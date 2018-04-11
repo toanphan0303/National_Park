@@ -6,6 +6,10 @@ export default gql`
       id
       title
       tripImage
+      rates{
+        id
+        rated
+      }
       park{
         id
       }
