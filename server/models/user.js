@@ -77,7 +77,9 @@ UserSchema.statics.findRates = function(id){
     .then(user => user.rates)
 }
 UserSchema.statics.deleteTrip = function(id, tripId){
+  const Trip = mongoose.model('trip')
   return this.findById(id, (err, user) =>{
+    Trip.find({_id:tripId}).remove().exec()
     user.trips.remove({_id : tripId})
     user.save((err) => {
       if(err){
