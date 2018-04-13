@@ -56,12 +56,10 @@ class Comments extends Component {
     })
   }
   handleEditComment = (editCommentId,editCommentContent, e) =>{
-    console.log(editCommentId,editCommentContent)
     this.setState({
       editCommentId,
       editCommentContent
     })
-    console.log(this.state)
   }
   handleEditCommentContent(e){
     this.setState({
@@ -91,16 +89,13 @@ class Comments extends Component {
     })
   }
   renderComments(){
-    console.log(this.state)
     const userId = this.props.data.user.id
-    console.log('userId ',userId)
     const defaultImg ='https://s3.amazonaws.com/user-upload-image/icons/profile-clipart-default-user-5.png'
     return this.state.comments.map(comment =>{
       let liked = false
       const userAlreadyLiked = _.filter(comment.likes, _.matches({user:{id:`${userId}`}}))
       _.isEmpty(userAlreadyLiked) ? liked=false : liked= true
       const likeAmount = comment.likes.length
-      console.log(' comment ',comment)
       return(
         <div key={comment.id}>
           <Comment style={{display:'inline-flex', padding:'10px 20px'}}>

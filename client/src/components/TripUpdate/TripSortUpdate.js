@@ -119,7 +119,7 @@ class TripSortUpdate extends Component {
         <div style={{display:'inline-flex'}}>
           <h4 style={{paddingRight:'10px'}}>Your Trip</h4>
           <Form.Field>
-            <Checkbox slider style={{height:'10px'}} onChange={this.togglePublicSetting.bind(this)} label='Visible to public' checked={this.state.public}  />
+            <Checkbox slider style={{height:'10px', zIndex:'0'}} onChange={this.togglePublicSetting.bind(this)} label='Visible to public' checked={this.state.public}  />
           </Form.Field>
         </div>
         <SortableTree

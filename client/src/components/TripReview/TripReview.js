@@ -13,7 +13,7 @@ import TripInfo from './TripInfo'
 import 'react-image-gallery/styles/css/image-gallery.css'
 import _ from 'lodash'
 import style from '../../style/TripReview.css'
-
+import SocialShare from './SocialShare'
 import {graphql, compose, withApollo} from 'react-apollo';
 class TripReview extends Component {
   constructor(props){
@@ -232,12 +232,17 @@ class TripReview extends Component {
           </Grid.Column>
         </Grid>
         <Segment mobile={16} tablet={8} computer={16}>
-          <Rated userId={this.props.user.id} tripId={this.props.data.trip.id}/>
-          <Comments id={this.state.tripId} />
-          <Form size='small'>
-            <input style={{width:'500px', height:'50px'}} value={this.state.comment} onChange={this.handleComment.bind(this)} />
-            <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />
-          </Form>
+          <div style={{display:'inline-flex'}}>
+            <Rated userId={this.props.user.id} tripId={this.props.data.trip.id}/>
+            <SocialShare />
+          </div>
+          <div>
+            <Comments id={this.state.tripId} />
+            <Form size='small'>
+              <input style={{width:'500px', height:'50px'}} value={this.state.comment} onChange={this.handleComment.bind(this)} />
+              <Button content='Add Comment' onClick={this.handleAddComment.bind(this)} labelPosition='left' icon='edit' primary />
+            </Form>
+          </div>
         </Segment>
       </div>
     )
